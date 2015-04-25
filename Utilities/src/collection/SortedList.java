@@ -20,7 +20,7 @@ public interface SortedList<E> extends List<E>, Sorted<E> {
      *            position of list end
      * @return new sublist created from set
      */
-    List<E> headList(E end);
+    SortedList<E> headList(E end);
 
     /**
      * Creates a sublist from main set using parameter index for start.
@@ -29,6 +29,6 @@ public interface SortedList<E> extends List<E>, Sorted<E> {
      *            position of list start
      * @return new subset created from list
      */
-    List<E> tailList(E start);
+    SortedList<E> tailList(E start);
 
 }

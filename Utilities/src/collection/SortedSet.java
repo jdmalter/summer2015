@@ -20,7 +20,7 @@ public interface SortedSet<E> extends Set<E>, Sorted<E> {
      *            position of set end
      * @return new subset created from set
      */
-    Set<E> headSet(E end);
+    SortedSet<E> headSet(E end);
 
     /**
      * Creates a subset from main set using parameter index for start.
@@ -29,5 +29,5 @@ public interface SortedSet<E> extends Set<E>, Sorted<E> {
      *            position of set start
      * @return new subset created from set
      */
-    Set<E> tailSet(E start);
+    SortedSet<E> tailSet(E start);
 }

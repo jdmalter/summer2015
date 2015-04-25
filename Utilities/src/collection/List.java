@@ -101,6 +101,12 @@ public interface List<E> extends Collection<E> {
     E set(int index, E obj);
 
     /**
+     * 
+     * @param c
+     */
+    void sort(Comparator<? super E> c);
+    
+    /**
      * Creates sublist from main list using parameter indexes for start and end.
      * 
      * @param start

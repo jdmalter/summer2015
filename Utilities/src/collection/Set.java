@@ -54,6 +54,6 @@ public interface Set<E> extends Bag<E> {
      *            position of set end
      * @return new subset created from set
      */
-    Set<E> subSet(E start, E end);
+    SortedSet<E> subSet(E start, E end);
 
 }

@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package collection;
 
 /**
@@ -8,29 +11,29 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface Stack<E> extends Collection<E> {
+public interface Dtack<E> extends Stack<E> {
 
     /**
-     * Returns first element without removing it.
+     * Returns bottom element without removing it.
      * 
-     * @return first element of queue
+     * @return top element of dtack
      */
-    E peekFirst();
+    E peekLast();
 
     /**
-     * Remove object from top of stack.
+     * Remove object from bottom of dtack.
      * 
      * @return true if object removed, false otherwise
      */
-    E popFirst();
+    E popLast();
 
     /**
-     * Adds object parameter to back of stack.
+     * Adds object parameter to bottom of dtack.
      * 
      * @param obj
-     *            object added into stack
+     *            object added into dtack
      * @return true if object was added, false otherwise
      */
-    boolean pushFirst(E obj);
+    boolean pushLast(E obj);
 
 }

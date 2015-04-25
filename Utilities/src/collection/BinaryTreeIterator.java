@@ -8,6 +8,6 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface Graph<E> extends Collection<E> {
+public interface BinaryTreeIterator<E> extends Iterator<E> {
 
 }

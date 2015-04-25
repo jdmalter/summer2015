@@ -8,6 +8,6 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface Tree<E> extends Collection<E> {
+public interface ListIterator<E> extends Iterator<E> {
 
 }

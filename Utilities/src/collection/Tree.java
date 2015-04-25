@@ -1,12 +1,13 @@
-/**
- * 
- */
 package collection;
 
 /**
- * @author Jacob
- *
+ * This interface is the root of the collection hierarchy.
+ * 
+ * @param <E>
+ *            The type of the elements stored in this collection.
+ * 
+ * @author Jacob Malter
  */
-public interface Tree {
+public interface Tree<E> extends Collection<E> {
 
 }

@@ -1,3 +1,6 @@
+/**
+ * The collection package offers an implementation of a collections framework.
+ */
 package collection;
 
 /**
@@ -41,4 +44,16 @@ public interface Set<E> extends Bag<E> {
      */
     @Override
     int hashCode();
+
+    /**
+     * Creates a subset from main set using parameter index for start and end.
+     * 
+     * @param start
+     *            position of set start
+     * @param end
+     *            position of set end
+     * @return new subset created from set
+     */
+    Set<E> subSet(E start, E end);
+
 }

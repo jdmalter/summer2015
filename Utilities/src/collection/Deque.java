@@ -1,3 +1,6 @@
+/**
+ * The collection package offers an implementation of a collections framework.
+ */
 package collection;
 
 /**

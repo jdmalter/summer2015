@@ -27,4 +27,9 @@ public interface Iterator<E> {
      */
     E next();
 
+    /**
+     * Removes the last element returned by next.
+     */
+    void remove();
+
 }

@@ -4,7 +4,9 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Represents a group of objects. Basically acts like a collection, but
+ * overrides equals and hashcode methods. Order does not matter, and replacement
+ * is allowed.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

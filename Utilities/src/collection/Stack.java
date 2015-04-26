@@ -4,7 +4,7 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Defines behavior for a last in, first out (LIFO) collection.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -14,16 +14,16 @@ package collection;
 public interface Stack<E> extends Collection<E> {
 
     /**
-     * Returns first element without removing it.
+     * Returns top element without removing it.
      * 
-     * @return first element of queue
+     * @return first element of stack
      */
     E peekFirst();
 
     /**
      * Remove object from top of stack.
      * 
-     * @return true if object removed, false otherwise
+     * @return top element of stack
      */
     E popFirst();
 

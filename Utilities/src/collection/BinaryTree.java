@@ -4,7 +4,8 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Defines behavior needed to process elements in a binary tree. Still similar
+ * in practice to a generic collection.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

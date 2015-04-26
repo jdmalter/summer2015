@@ -3,8 +3,10 @@
  */
 package collection;
 
+import java.util.Comparator;
+
 /**
- * This interface applies to data structures holding sorted elements.
+ * Applies to data structures holding sorted elements.
  * 
  * @param <E>
  *            The type of the elements stored in a data structure.

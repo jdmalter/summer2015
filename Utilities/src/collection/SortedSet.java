@@ -4,7 +4,9 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Not based on the mathematical definition of a set. Order does matter, and
+ * replacement is not allowed. Adds behavior to return a headSet and tailSet
+ * plus behavior taken from sorted.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

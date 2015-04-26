@@ -4,7 +4,7 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Defines behavior for a first in, first out (FIFO) collection.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -32,7 +32,7 @@ public interface Queue<E> extends Collection<E> {
     /**
      * Remove object from front of queue.
      * 
-     * @return true if object removed, false otherwise
+     * @return first element of queue
      */
-    boolean removeFirst();
+    E removeFirst();
 }

@@ -4,7 +4,9 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Based on the mathematical definition of a set. Basically acts like a bag, but
+ * overrides equals and hashcode methods. Order does not matter, and replacement
+ * is not allowed. Adds behavior to return a subSet.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -54,6 +56,6 @@ public interface Set<E> extends Bag<E> {
      *            position of set end
      * @return new subset created from set
      */
-    SortedSet<E> subSet(E start, E end);
+    Set<E> subSet(E start, E end);
 
 }

@@ -4,7 +4,8 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Adds behavior to add and remove from both sides. Imitates a double sided
+ * queue or stack.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -14,7 +15,7 @@ package collection;
 public interface Deque<E> extends Queue<E> {
 
     /**
-     * Adds object parameter to back of deque.
+     * Adds object parameter to front of deque.
      * 
      * @param obj
      *            object added into queue
@@ -25,15 +26,15 @@ public interface Deque<E> extends Queue<E> {
     /**
      * Returns last element without removing it.
      * 
-     * @return first element of deque
+     * @return last element of deque
      */
     E peekLast();
 
     /**
-     * Remove object from back of deque.
+     * Remove object from front of deque.
      * 
-     * @return true if object removed, false otherwise
+     * @return last element of deque
      */
-    boolean removeLast();
+    E removeLast();
 
 }

@@ -4,7 +4,8 @@
 package collection;
 
 /**
- * This interface is the root of the collection hierarchy.
+ * Acts like a list with elements in a specific order. Adds behavior to return a
+ * headList and tailList plus behavior taken from sorted.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

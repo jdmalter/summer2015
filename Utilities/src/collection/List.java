@@ -4,8 +4,9 @@
 package collection;
 
 /**
- * This interface is the root of the list hierarchy, extending the collections
- * hierarchy. Elements have positions, may be duplicated.
+ * Elements have a position. Adds new behavior needed to process elements with
+ * positions. Order does matter, and replacement is allowed. Includes a method
+ * to sort elements in this list and iterate with listIterator.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -100,12 +101,6 @@ public interface List<E> extends Collection<E> {
      */
     E set(int index, E obj);
 
-    /**
-     * 
-     * @param c
-     */
-    void sort(Comparator<? super E> c);
-    
     /**
      * Creates sublist from main list using parameter indexes for start and end.
      * 

@@ -4,7 +4,7 @@
 package collection;
 
 /**
- * This interface is the root of the iterator hierarchy.
+ * Defines basic behaviors needed to iterator through a collection.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

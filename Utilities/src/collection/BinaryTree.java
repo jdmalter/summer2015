@@ -5,7 +5,6 @@ package collection;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.ListIterator;
 
 /**
  * Defines behavior needed to process elements in a binary tree. Still similar

@@ -21,6 +21,7 @@ public interface LinearIterator<E> extends Iterator<E> {
      * e).
      * 
      * @param e
+     *            object being added by iterator
      */
     void add(E e);
 
@@ -64,6 +65,7 @@ public interface LinearIterator<E> extends Iterator<E> {
      * remove() or add().
      * 
      * @param e
+     *            object being set by iterator
      */
     void set(E e);
 

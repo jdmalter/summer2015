@@ -1,3 +1,5 @@
 builderpattern
 enumsingleton
+memoryleakingstack
+noninstantiableclass
 serviceproviderframeworksketch

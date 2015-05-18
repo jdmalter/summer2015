@@ -1,11 +1,11 @@
 /**
  * Illustrates an advantage from item 1: consider static factory methods instead of constructors.
  */
-package creatinganddestroyingobjects.serviceproviderframeworksketch;
+package serviceproviderframeworksketch;
 
 /**
  * System registers service implementations. "provider registration API"
- * 
+ * F
  * @author Jacob Malter based on content of Effective Java (2nd Edition) by
  *         Joshua Bloch
  *

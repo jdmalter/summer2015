@@ -1,7 +1,7 @@
 /**
  * Illustrates an advantage from item 1: consider static factory methods instead of constructors.
  */
-package creatinganddestroyingobjects.serviceproviderframeworksketch;
+package serviceproviderframeworksketch;
 
 /**
  * Allows providers to implement a service. "service interface"

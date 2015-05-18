@@ -5,7 +5,7 @@ package serviceproviderframeworksketch;
 
 /**
  * System registers service implementations. "provider registration API"
- * F
+ * 
  * @author Jacob Malter based on content of Effective Java (2nd Edition) by
  *         Joshua Bloch
  *

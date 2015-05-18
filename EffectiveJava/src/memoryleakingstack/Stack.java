@@ -1,5 +1,6 @@
 /**
- * Illustrates concepts from item 6: eliminate obsolete object references.
+ * Illustrates concepts from item 6/11: eliminate obsolete object 
+ * references/override clone judiciously.
  */
 package memoryleakingstack;
 
@@ -58,4 +59,20 @@ public class Stack {
 		if (elements.length == size)
 			elements = Arrays.copyOf(elements, 2 * size + 1);
 	}
+
+	/**
+	 * Creates a clone with super class clone method.
+	 * 
+	 * @return Stack clone of object
+	 */
+	public Stack clone() {
+		try {
+			Stack result = (Stack) super.clone();
+			result.elements = elements.clone();
+			return result;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError(); // Can't happen
+		}
+	}
+
 }

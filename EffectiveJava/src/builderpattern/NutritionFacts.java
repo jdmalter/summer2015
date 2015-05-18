@@ -1,5 +1,6 @@
 /**
- * Illustrates a design pattern from item 2: consider a builder when faced with many constructor parameters.
+ * Illustrates a design pattern from item 2: consider a builder when faced with
+ * many constructor parameters.
  */
 package builderpattern;
 

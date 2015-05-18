@@ -1,5 +1,6 @@
 /**
- * Illustrates a design pattern from item 3: enforce the singleton property with a private constructor or an enum type.
+ * Illustrates a design pattern from item 3: enforce the singleton property 
+ * with a private constructor or an enum type.
  */
 package enumsingleton;
 

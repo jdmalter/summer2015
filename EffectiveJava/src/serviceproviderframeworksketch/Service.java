@@ -11,5 +11,7 @@ package serviceproviderframeworksketch;
  *
  */
 public interface Service {
+
 	// Service specific methods go here
+
 }

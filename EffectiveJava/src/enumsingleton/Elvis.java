@@ -21,4 +21,5 @@ public enum Elvis {
 	public void leaveTheBuilding() {
 		// Still not sure what goes here...but it does something.
 	}
+
 }

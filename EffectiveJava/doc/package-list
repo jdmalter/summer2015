@@ -3,6 +3,10 @@ enumsingleton
 equalshashcode
 finalclass
 forwardingwithcomposition
+inheritanceovertagging
 memoryleakingstack
 noninstantiableclass
 serviceproviderframeworksketch
+skeletalabstractinheritance
+staticimport
+strategypattern

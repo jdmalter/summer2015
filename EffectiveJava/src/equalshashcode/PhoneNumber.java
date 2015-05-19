@@ -20,6 +20,8 @@ public class PhoneNumber implements Comparable<PhoneNumber> {
 	private final short prefix;
 	private final short lineNumber;
 
+	private volatile int hashCode;
+
 	/**
 	 * Constructs a PhoneNumber object with area code, prefix, and line number
 	 * numbers.
@@ -105,17 +107,23 @@ public class PhoneNumber implements Comparable<PhoneNumber> {
 	}
 
 	/**
-	 * Creates a hashcode representation of this object.
+	 * Creates a hashcode representation of this object. This implementation
+	 * only computes the hashcode if it is not already set since this object is
+	 * immutable and therefore has constant hashcode returns.
 	 * 
 	 * @return int hashcode
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + areaCode;
-		result = prime * result + prefix;
-		result = prime * result + lineNumber;
+		int result = hashCode;
+		if (result == 0) {
+			final int prime = 31;
+			result = 1;
+			result = prime * result + areaCode;
+			result = prime * result + prefix;
+			result = prime * result + lineNumber;
+			hashCode = result;
+		}
 		return result;
 	}
 

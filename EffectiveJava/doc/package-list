@@ -1,4 +1,5 @@
 builderpattern
+enumdemonstration
 enumsingleton
 equalshashcode
 finalclass
@@ -7,6 +8,7 @@ heterogeneouscontainers
 inheritanceovertagging
 memoryleakingstack
 noninstantiableclass
+overrideannotation
 serviceproviderframeworksketch
 skeletalabstractinheritance
 staticimport

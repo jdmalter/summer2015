@@ -3,6 +3,7 @@ enumsingleton
 equalshashcode
 finalclass
 forwardingwithcomposition
+heterogeneouscontainers
 inheritanceovertagging
 memoryleakingstack
 noninstantiableclass

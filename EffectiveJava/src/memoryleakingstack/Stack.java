@@ -1,30 +1,39 @@
 /**
- * Illustrates concepts from item 6/11: eliminate obsolete object 
- * references/override clone judiciously.
+ * Illustrates concepts from item 6/11/26/28: eliminate obsolete object 
+ * references/override clone judiciously/favor generic types/use bounded 
+ * wildcards to increase API flexibility.
  */
 package memoryleakingstack;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EmptyStackException;
 
 /**
- * Non-generic stack with a fixed memory leak problem.
+ * Non-generic stack with a fixed memory leak problem. Formerly an object based
+ * collection subjected to generification.
  * 
  * @author Jacob Malter based on content of Effective Java (2nd Edition) by
  *         Joshua Bloch
  *
+ * @param <E>
+ *            type of object stored in stack
  */
-public class Stack {
+public class Stack<E> {
 
-	private Object elements[];
+	private E elements[];
 	private int size = 0;
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 
 	/**
 	 * Creates a blank stack object.
 	 */
+	@SuppressWarnings("unchecked")
 	public Stack() {
-		elements = new Object[DEFAULT_INITIAL_CAPACITY];
+		// This implementation's elements array will only contain E instance
+		// from push(E). This is sufficient to ensure type safety, but the
+		// runtime type of the array won't be E[]; it will always be Object[]!
+		elements = (E[]) new Object[DEFAULT_INITIAL_CAPACITY];
 	}
 
 	/**
@@ -33,9 +42,22 @@ public class Stack {
 	 * @param e
 	 *            element being added
 	 */
-	public void push(Object e) {
+	public void push(E e) {
 		ensureCapacity();
 		elements[size++] = e;
+	}
+
+	/**
+	 * Adds every element in the parameter iterable into the invoking stack
+	 * instance.
+	 * 
+	 * @param src
+	 *            iterable producing elements
+	 */
+	public void pushAll(Iterable<? extends E> src) {
+		for (E e : src) {
+			push(e);
+		}
 	}
 
 	/**
@@ -43,12 +65,44 @@ public class Stack {
 	 * 
 	 * @return top element being removed
 	 */
-	public Object pop() {
+	public E pop() {
 		if (size == 0)
 			throw new EmptyStackException();
-		Object result = elements[--size];
+		E result = elements[--size];
 		elements[size] = null; // Eliminate obsolete reference
 		return result;
+	}
+
+	/**
+	 * Returns top element from stack without removing it.
+	 * 
+	 * @return top element being peeked
+	 */
+	public E peek() {
+		if (size == 0)
+			throw new EmptyStackException();
+		return elements[--size];
+	}
+
+	/**
+	 * Removes every element in the invoking staack instance and places into the
+	 * parameter collection.
+	 * 
+	 * @param dst
+	 *            collection consuming elements
+	 */
+	public void popAll(Collection<? super E> dst) {
+		while (!isEmpty())
+			dst.add(pop());
+	}
+
+	/**
+	 * Tests whether or not a stack is empty.
+	 * 
+	 * @return true if stack contains no elements, false otherwise
+	 */
+	public boolean isEmpty() {
+		return size == 0;
 	}
 
 	/**
@@ -65,9 +119,12 @@ public class Stack {
 	 * 
 	 * @return Stack clone of object
 	 */
-	public Stack clone() {
+	public Stack<E> clone() {
 		try {
-			Stack result = (Stack) super.clone();
+			// Type cast on object returned from object's clone method. Should
+			// safely return type object to be cast into a Stack<E>.
+			@SuppressWarnings("unchecked")
+			Stack<E> result = (Stack<E>) super.clone();
 			result.elements = elements.clone();
 			return result;
 		} catch (CloneNotSupportedException e) {

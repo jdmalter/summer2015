@@ -7,7 +7,8 @@ package inheritanceovertagging;
 /**
  * A general figure contract intended to be built upon.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public abstract class Figure {

@@ -1,19 +1,27 @@
 /**
- * Illustrates defensive programming from item 39: make defensive copies when needed.
+ * Illustrates defensive programming from item 39/76: make defensive copies
+ * when needed/write readObject methods defensively.
  */
 package defensivecopies;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * A period of time with a start and end.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
-public final class Period {
-	private final Date start;
-	private final Date end;
+public final class Period implements Serializable {
+	private static final long serialVersionUID = 4025455619631294981L;
+	private transient Date start;
+	private transient Date end;
 
 	/**
 	 * Constructs a period object.
@@ -51,6 +59,27 @@ public final class Period {
 	 */
 	public Date end() {
 		return new Date(end.getTime());
+	}
+
+	private void readObject(ObjectInputStream s) throws IOException,
+			ClassNotFoundException {
+		s.defaultReadObject();
+
+		// Defensively copy our mutable components
+		start = new Date(start.getTime());
+		end = new Date(end.getTime());
+
+		// Check that our invariants are satisfied
+		if (start.compareTo(end) > 0)
+			throw new InvalidObjectException(start + " after " + end);
+	}
+
+	private void writeObject(ObjectOutputStream s) throws IOException {
+		s.defaultWriteObject();
+
+		// Serialize fields defensively
+		s.writeObject(start());
+		s.writeObject(end());
 	}
 
 }

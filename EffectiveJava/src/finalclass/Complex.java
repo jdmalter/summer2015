@@ -6,7 +6,8 @@ package finalclass;
 /**
  * A complex number with real and imaginary numbers.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public final class Complex {

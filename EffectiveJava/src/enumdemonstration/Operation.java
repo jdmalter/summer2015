@@ -6,8 +6,8 @@ package enumdemonstration;
 /**
  * Interfaces adds extensibility into implementing enum classes.
  * 
- * @author Jacob Malter
- *
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  */
 public interface Operation {
 

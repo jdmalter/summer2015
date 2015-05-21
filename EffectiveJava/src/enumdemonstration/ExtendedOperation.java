@@ -10,7 +10,8 @@ import java.util.Map;
 /**
  * Represents two extended calculation functions.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public enum ExtendedOperation implements Operation {

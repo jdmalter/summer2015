@@ -4,6 +4,8 @@
  */
 package enumsingleton;
 
+import java.util.Arrays;
+
 /**
  * Creates a single instance of Elvis.
  * 
@@ -14,6 +16,15 @@ package enumsingleton;
 public enum Elvis {
 	/** Single instance of Elvis running around. */
 	INSTANCE;
+
+	private String[] favoriteSongs = { "Hound Dog", "Heartbreak Hotel" };
+
+	/**
+	 * Prints out favorite songs of this singleton instance.
+	 */
+	public void printFavorites() {
+		System.out.println(Arrays.toString(favoriteSongs));
+	}
 
 	/**
 	 * Does something?

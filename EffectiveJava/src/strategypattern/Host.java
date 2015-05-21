@@ -7,7 +7,8 @@ package strategypattern;
 /**
  * Class that contains a comparator for string.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public class Host {

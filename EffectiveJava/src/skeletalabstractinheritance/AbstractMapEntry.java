@@ -10,7 +10,8 @@ import java.util.Map.Entry;
 /**
  * Skeletal implementation of Entry sub-interface.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  * @param <K>
  *            type of object data used to access entry

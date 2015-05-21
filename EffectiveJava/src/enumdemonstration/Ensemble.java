@@ -6,7 +6,8 @@ package enumdemonstration;
 /**
  * Represents types of ensembles up to twelve members.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public enum Ensemble {

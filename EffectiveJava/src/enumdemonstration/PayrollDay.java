@@ -7,7 +7,8 @@ package enumdemonstration;
  * Represents payroll on a single day of the week for every day in the week.
  * Finds pay based on which day is used.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public enum PayrollDay {

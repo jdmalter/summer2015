@@ -7,7 +7,8 @@ package inheritanceovertagging;
 /**
  * A specific, immutable implementation of the figure contract for a circle.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public final class Circle extends Figure {

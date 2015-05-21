@@ -9,7 +9,8 @@ import java.util.Set;
 /**
  * Wrapper class using composition in place over inheritance.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  * @param <E>
  *            object type of element data

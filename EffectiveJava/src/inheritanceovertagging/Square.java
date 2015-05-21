@@ -8,7 +8,8 @@ package inheritanceovertagging;
  * A specific, immutable implementation of the figure contract for a square that
  * extends a rectangle.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public final class Square extends Rectangle {

@@ -6,7 +6,8 @@ package enumdemonstration;
 /**
  * Enum type with data and behavior representing planets.
  * 
- * @author Jacob Malter
+ * @author Jacob Malter based on content of Effective Java (2nd Edition) by
+ *         Joshua Bloch
  *
  */
 public enum Planets {

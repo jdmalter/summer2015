@@ -39,7 +39,7 @@ public interface List<E> extends Collection<E> {
 	 *            collection of elements inserted into list
 	 * @return true if elements added, false otherwise
 	 */
-	boolean addAll(int index, Collection<E> c);
+	boolean addAll(int index, Collection<? extends E> c);
 
 	/**
 	 * Returns object at index in list.

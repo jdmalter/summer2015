@@ -81,7 +81,7 @@ public class Stack<E> {
 	public E peek() {
 		if (size == 0)
 			throw new EmptyStackException();
-		return elements[--size];
+		return elements[size - 1];
 	}
 
 	/**

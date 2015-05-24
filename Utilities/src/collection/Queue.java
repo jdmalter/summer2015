@@ -13,26 +13,36 @@ package collection;
  */
 public interface Queue<E> extends Collection<E> {
 
-    /**
-     * Adds object parameter to back of queue.
-     * 
-     * @param obj
-     *            object added into queue
-     * @return true if object was added, false otherwise
-     */
-    boolean addLast(E obj);
+	/**
+	 * Adds object parameter to back of queue.
+	 * 
+	 * @param obj
+	 *            object added into queue
+	 * @return true if object was added, false otherwise
+	 */
+	boolean add(E obj);
 
-    /**
-     * Returns first element without removing it.
-     * 
-     * @return first element of queue
-     */
-    E peekFirst();
+	/**
+	 * Offers object parameter to back of queue. Adds object if size
+	 * restrictions are not violated.
+	 * 
+	 * @param obj
+	 *            object offered into queue
+	 */
+	void offer(E obj);
 
-    /**
-     * Remove object from front of queue.
-     * 
-     * @return first element of queue
-     */
-    E removeFirst();
+	/**
+	 * Returns first element without removing it.
+	 * 
+	 * @return first element of queue
+	 */
+	E peek();
+
+	/**
+	 * Remove object from front of queue.
+	 * 
+	 * @return first element of queue
+	 */
+	E remove();
+
 }

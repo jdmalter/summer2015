@@ -13,27 +13,36 @@ package collection;
  */
 public interface Stack<E> extends Collection<E> {
 
-    /**
-     * Returns top element without removing it.
-     * 
-     * @return first element of stack
-     */
-    E peekFirst();
+	/**
+	 * Offers object parameter to back of stack. Pushes object if size
+	 * restrictions are not violated.
+	 * 
+	 * @param obj
+	 *            object offered into stack
+	 */
+	void offer(E obj);
 
-    /**
-     * Remove object from top of stack.
-     * 
-     * @return top element of stack
-     */
-    E popFirst();
+	/**
+	 * Returns top element without removing it.
+	 * 
+	 * @return first element of stack
+	 */
+	E peek();
 
-    /**
-     * Adds object parameter to back of stack.
-     * 
-     * @param obj
-     *            object added into stack
-     * @return true if object was added, false otherwise
-     */
-    boolean pushFirst(E obj);
+	/**
+	 * Remove object from top of stack.
+	 * 
+	 * @return top element of stack
+	 */
+	E pop();
+
+	/**
+	 * Adds object parameter to back of stack.
+	 * 
+	 * @param obj
+	 *            object added into stack
+	 * @return true if object was added, false otherwise
+	 */
+	boolean push(E obj);
 
 }

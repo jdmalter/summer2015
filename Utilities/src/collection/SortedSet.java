@@ -15,21 +15,22 @@ package collection;
  */
 public interface SortedSet<E> extends Set<E>, Sorted<E> {
 
-    /**
-     * Creates a subset from main set using parameter index for end.
-     * 
-     * @param end
-     *            position of set end
-     * @return new subset created from set
-     */
-    SortedSet<E> headSet(E end);
+	/**
+	 * Creates a subset from main set using parameter index for end.
+	 * 
+	 * @param end
+	 *            position of set end
+	 * @return new subset created from set
+	 */
+	SortedSet<E> headSet(E end);
 
-    /**
-     * Creates a subset from main set using parameter index for start.
-     * 
-     * @param start
-     *            position of set start
-     * @return new subset created from set
-     */
-    SortedSet<E> tailSet(E start);
+	/**
+	 * Creates a subset from main set using parameter index for start.
+	 * 
+	 * @param start
+	 *            position of set start
+	 * @return new subset created from set
+	 */
+	SortedSet<E> tailSet(E start);
+
 }

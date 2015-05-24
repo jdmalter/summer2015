@@ -74,4 +74,5 @@ public interface Sorted<E> {
 	 * @return least element in a collection
 	 */
 	E minimum();
+
 }

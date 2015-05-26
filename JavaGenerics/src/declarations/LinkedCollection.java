@@ -37,9 +37,18 @@ public class LinkedCollection<E> extends AbstractCollection<E> {
 
 	private int size = 0;
 
+	/**
+	 * Constructs an empty linked collection.
+	 */
 	public LinkedCollection() {
 	}
 
+	/**
+	 * Constructs a collection with every elements in parameter collection.
+	 * 
+	 * @param c
+	 *            collection whose elements are added into invoking instance.
+	 */
 	public LinkedCollection(Collection<? extends E> c) {
 		addAll(c);
 	}

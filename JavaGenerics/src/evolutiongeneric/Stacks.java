@@ -14,6 +14,7 @@ public class Stacks {
 	 * This implementation empties the stack being passed in as a parameter.
 	 * 
 	 * @param <E>
+	 *            object type of elements
 	 * 
 	 * @param in
 	 *            stack being reversed

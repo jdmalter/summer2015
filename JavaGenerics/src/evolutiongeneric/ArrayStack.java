@@ -7,6 +7,9 @@ import java.util.NoSuchElementException;
  * Legacy library stack implementation.
  * 
  * @author Jacob Malter
+ * 
+ * @param <E>
+ *            object type of element data
  *
  */
 public class ArrayStack<E> implements Stack<E> {

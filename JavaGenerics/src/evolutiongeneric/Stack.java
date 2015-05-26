@@ -4,6 +4,9 @@ package evolutiongeneric;
  * Legacy library stack.
  * 
  * @author Jacob Malter
+ * 
+ * @param <E>
+ *            object type of element data
  *
  */
 public interface Stack<E> {

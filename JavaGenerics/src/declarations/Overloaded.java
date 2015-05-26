@@ -1,7 +1,5 @@
 package declarations;
 
-import java.util.List;
-
 /**
  * NO LONGER WORKS WITH JAVA COMPILER. BOOK EXAMPLE INCORRECT. FAILS TO COMPILE.
  * 
@@ -10,8 +8,6 @@ import java.util.List;
  * @author Jacob Malter
  *
  */
-@SuppressWarnings("unused")
-// Import unused because method commented out
 public class Overloaded {
 
 	/**

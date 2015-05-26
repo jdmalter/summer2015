@@ -13,42 +13,6 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface NavigableSet<E> extends SortedSet<E> {
-
-    /**
-     * Returns ceiling on parameter element.
-     * 
-     * @param e
-     *            object to match
-     * @return least element greater or equal to e, null otherwise
-     */
-    E ceiling(E e);
-
-    /**
-     * Returns floor on parameter element.
-     * 
-     * @param e
-     *            object to match
-     * @return greatest element less or equal to e, null otherwise
-     */
-    E floor(E e);
-
-    /**
-     * Returns higher on parameter element.
-     * 
-     * @param e
-     *            object to match
-     * @return least element higher (but not equal) to e, null otherwise
-     */
-    E higher(E e);
-
-    /**
-     * Returns lower on parameter element.
-     * 
-     * @param e
-     *            object to match
-     * @return greatest element lower (but not equal) to e, null otherwise
-     */
-    E lower(E e);
+public interface NavigableSet<E> extends SortedSet<E>, Navigable<E> {
 
 }

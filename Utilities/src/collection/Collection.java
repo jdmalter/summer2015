@@ -3,10 +3,14 @@
  */
 package collection;
 
+import java.util.Iterator;
+
 /**
  * Root of the collection hierarchy. Defines basic behavior for a group of
  * objects. Uses individual and bulk methods. Includes methods to convert
  * collection into an array.
+ * 
+ * Every concrete subclass and subinterface must implement this interface.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.

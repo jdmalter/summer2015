@@ -14,27 +14,27 @@ package collection;
  */
 public interface Deque<E> extends Queue<E> {
 
-    /**
-     * Adds object parameter to front of deque.
-     * 
-     * @param obj
-     *            object added into queue
-     * @return true if object was added, false otherwise
-     */
-    boolean addFirst(E obj);
+	/**
+	 * Adds object parameter to front of deque.
+	 * 
+	 * @param obj
+	 *            object added into queue
+	 * @return true if object was added, false otherwise
+	 */
+	boolean addFront(E obj);
 
-    /**
-     * Returns last element without removing it.
-     * 
-     * @return last element of deque
-     */
-    E peekLast();
+	/**
+	 * Returns last element without removing it.
+	 * 
+	 * @return last element of deque
+	 */
+	E peekLast();
 
-    /**
-     * Remove object from front of deque.
-     * 
-     * @return last element of deque
-     */
-    E removeLast();
+	/**
+	 * Remove object from front of deque.
+	 * 
+	 * @return last element of deque
+	 */
+	E removeLast();
 
 }

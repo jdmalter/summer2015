@@ -24,6 +24,9 @@ public interface SortedSet<E> extends Set<E>, Sorted<E> {
 	 */
 	SortedSet<E> headSet(E end);
 
+	@Override
+	SortedSet<E> subSet(E start, E end);
+
 	/**
 	 * Creates a subset from main set using parameter index for start.
 	 * 

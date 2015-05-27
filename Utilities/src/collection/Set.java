@@ -17,14 +17,24 @@ public interface Set<E> extends Bag<E> {
 
 	/**
 	 * Adds object parameter to collection if it is unique. Duplicate objects
-	 * are not allowed.
+	 * have no effect.
 	 * 
 	 * @param obj
 	 *            object added into collection
-	 * @return true if object was added, false otherwise
+	 * @return true if collection changed
 	 */
 	@Override
 	boolean add(E obj);
+
+	/**
+	 * Adds every element from producing collection into invoking collection if
+	 * it is unique. Duplicate objects have no effect.
+	 * 
+	 * @param coll
+	 *            object added into collection
+	 * @return true if collection changed
+	 */
+	boolean addAll(Collection<? extends E> coll);
 
 	/**
 	 * Equivalence relation must be reflexive (a,a), symmetric (a,b)-->(b,a),
@@ -46,16 +56,5 @@ public interface Set<E> extends Bag<E> {
 	 */
 	@Override
 	int hashCode();
-
-	/**
-	 * Creates a subset from main set using parameter index for start and end.
-	 * 
-	 * @param start
-	 *            position of set start
-	 * @param end
-	 *            position of set end
-	 * @return new subset created from set
-	 */
-	Set<E> subSet(E start, E end);
 
 }

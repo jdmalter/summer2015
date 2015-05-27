@@ -9,7 +9,7 @@ import java.util.ListIterator;
  * @author Jacob Malter
  *
  * @param <E>
- *            element type
+ *            The type of the elements stored in this collection.
  */
 public interface List<E> extends Collection<E> {
 

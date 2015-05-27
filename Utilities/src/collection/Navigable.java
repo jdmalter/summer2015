@@ -1,5 +1,7 @@
 package collection;
 
+import java.util.Comparator;
+
 /**
  * Applies to data structures holding navigable elements.
  * 
@@ -8,41 +10,64 @@ package collection;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public interface Navigable<E> extends Sorted<E> {
+public interface Navigable<E> {
+
 	/**
-	 * Returns ceiling on parameter element.
+	 * Returns greatest element greater than or equal to e.
 	 * 
 	 * @param e
-	 *            object to match
-	 * @return least element greater or equal to e, null otherwise
+	 *            boundary object
+	 * @return greatest element greater than or equal to e, null otherwise
 	 */
 	E ceiling(E e);
 
 	/**
-	 * Returns floor on parameter element.
+	 * Returns a sorted collections comparator. If natural ordering is used,
+	 * null is returned.
+	 * 
+	 * @return set's comparator. null if naturally ordered.
+	 */
+	Comparator<E> comparator();
+
+	/**
+	 * Returns greatest element less than or equal to e.
 	 * 
 	 * @param e
-	 *            object to match
-	 * @return greatest element less or equal to e, null otherwise
+	 *            boundary object
+	 * @return greatest element less than or equal to e, null otherwise
 	 */
 	E floor(E e);
 
 	/**
-	 * Returns higher on parameter element.
+	 * Returns least element strictly greater than e.
 	 * 
 	 * @param e
-	 *            object to match
-	 * @return least element higher (but not equal) to e, null otherwise
+	 *            boundary object
+	 * @return least element strictly greater than e, null otherwise
 	 */
 	E higher(E e);
 
 	/**
-	 * Returns lower on parameter element.
+	 * Returns greatest element strictly less than e.
 	 * 
 	 * @param e
-	 *            object to match
-	 * @return greatest element lower (but not equal) to e, null otherwise
+	 *            boundary object
+	 * @return greatest element strictly less than e, null otherwise
 	 */
 	E lower(E e);
+
+	/**
+	 * Returns last element in a collection.
+	 * 
+	 * @return last element in a collection, null otherwise
+	 */
+	E pollLast();
+
+	/**
+	 * Returns first element in a collection.
+	 * 
+	 * @return first element in a collection, null otherwise
+	 */
+	E pollFirst();
 
 }

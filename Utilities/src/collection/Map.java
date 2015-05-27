@@ -17,6 +17,62 @@ package collection;
 public interface Map<K, V> {
 
 	/**
+	 * A single association between a key and value.
+	 * 
+	 * @author Jacob Malter
+	 *
+	 * @param <K>
+	 *            key value used to access map
+	 * @param <V>
+	 *            object data stored within map
+	 */
+	interface Entry<K, V> {
+
+		/**
+		 * Equivalence relation must be reflexive (a,a), symmetric
+		 * (a,b)-->(b,a), and transitive ((a,b)^(b,c))-->(a,c).
+		 * 
+		 * Tests if entry is similar.
+		 * 
+		 * @param obj
+		 *            Another entry compared to entry
+		 * @return true if equal, false otherwise
+		 */
+		boolean equals(Object obj);
+
+		/**
+		 * Returns key of this entry.
+		 * 
+		 * @return key of this entry
+		 */
+		K getKey();
+
+		/**
+		 * Returns value of this entry.
+		 * 
+		 * @return value of this entry
+		 */
+		V getValue();
+
+		/**
+		 * Generates a hashcode for an entry.
+		 * 
+		 * @return int hashcode
+		 */
+		int hashcode();
+
+		/**
+		 * Sets the value of this entry to parameter value.
+		 * 
+		 * @param v
+		 *            value that this entry is accepting
+		 * @return previous value of this entry
+		 */
+		V setValue(V v);
+
+	}
+
+	/**
 	 * Removes all entries from a collection.
 	 */
 	void clear();
@@ -152,61 +208,5 @@ public interface Map<K, V> {
 	 * @return collection of values
 	 */
 	Collection<V> values();
-
-	/**
-	 * A single association between a key and value.
-	 * 
-	 * @author Jacob Malter
-	 *
-	 * @param <K>
-	 *            key value used to access map
-	 * @param <V>
-	 *            object data stored within map
-	 */
-	interface Entry<K, V> {
-
-		/**
-		 * Equivalence relation must be reflexive (a,a), symmetric
-		 * (a,b)-->(b,a), and transitive ((a,b)^(b,c))-->(a,c).
-		 * 
-		 * Tests if entry is similar.
-		 * 
-		 * @param obj
-		 *            Another entry compared to entry
-		 * @return true if equal, false otherwise
-		 */
-		boolean equals(Object obj);
-
-		/**
-		 * Returns key of this entry.
-		 * 
-		 * @return key of this entry
-		 */
-		K getKey();
-
-		/**
-		 * Returns value of this entry.
-		 * 
-		 * @return value of this entry
-		 */
-		V getValue();
-
-		/**
-		 * Generates a hashcode for an entry.
-		 * 
-		 * @return int hashcode
-		 */
-		int hashcode();
-
-		/**
-		 * Sets the value of this entry to parameter value.
-		 * 
-		 * @param v
-		 *            value that this entry is accepting
-		 * @return previous value of this entry
-		 */
-		V setValue(V v);
-
-	}
 
 }

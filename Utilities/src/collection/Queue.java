@@ -14,13 +14,12 @@ package collection;
 public interface Queue<E> extends Collection<E> {
 
 	/**
-	 * Adds object parameter to back of queue.
+	 * Returns first element but does not remove. Throws exception if queue is
+	 * empty.
 	 * 
-	 * @param obj
-	 *            object added into queue
-	 * @return true if object was added, false otherwise
+	 * @return first element
 	 */
-	boolean add(E obj);
+	E element();
 
 	/**
 	 * Offers object parameter to back of queue. Adds object if size
@@ -28,20 +27,28 @@ public interface Queue<E> extends Collection<E> {
 	 * 
 	 * @param obj
 	 *            object offered into queue
+	 * @return true if successful
 	 */
-	void offer(E obj);
+	boolean offer(E obj);
 
 	/**
-	 * Returns first element without removing it.
+	 * Returns first element but does not remove.
 	 * 
-	 * @return first element of queue
+	 * @return first element, null if empty
 	 */
 	E peek();
 
 	/**
-	 * Remove object from front of queue.
+	 * Returns first element and removes.
 	 * 
-	 * @return first element of queue
+	 * @return first element, null if empty
+	 */
+	E poll();
+
+	/**
+	 * Returns first element and removes. Throws exception if queue is empty.
+	 * 
+	 * @return first element
 	 */
 	E remove();
 

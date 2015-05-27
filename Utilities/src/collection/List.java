@@ -3,10 +3,6 @@
  */
 package collection;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.ListIterator;
-
 /**
  * Elements have a position. Adds new behavior needed to process elements with
  * positions. Order does matter, and replacement is allowed. Includes a method
@@ -106,32 +102,19 @@ public interface List<E> extends Collection<E> {
 	E set(int index, E obj);
 
 	/**
-	 * Sorts elements in a list using a order defined by the comparator
-	 * parameter.
-	 * 
-	 * @param c
-	 *            comparator used for sorting
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	default void sort(Comparator<? super E> c) {
-		Object[] a = toArray();
-		Arrays.sort(a, (Comparator) c);
-		ListIterator<E> i = listIterator();
-		for (Object e : a) {
-			i.next();
-			i.set((E) e);
-		}
-	}
-
-	/**
 	 * Creates sublist from main list using parameter indexes for start and end.
 	 * 
 	 * @param start
 	 *            position of list start
+	 * @param startInclusive
+	 *            start is included in return
 	 * @param end
 	 *            position of list end
+	 * @param endInclusive
+	 *            end is included in return
 	 * @return new list created from list
 	 */
-	List<E> subList(int start, int end);
+	List<E> subList(int start, boolean startInclusive, int end,
+			boolean endInclusive);
 
 }

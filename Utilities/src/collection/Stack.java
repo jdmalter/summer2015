@@ -19,8 +19,9 @@ public interface Stack<E> extends Collection<E> {
 	 * 
 	 * @param obj
 	 *            object offered into stack
+	 * @return true if successful
 	 */
-	void offer(E obj);
+	boolean offer(E obj);
 
 	/**
 	 * Returns top element without removing it.
@@ -30,19 +31,20 @@ public interface Stack<E> extends Collection<E> {
 	E peek();
 
 	/**
-	 * Remove object from top of stack.
+	 * Returns top element and removes. Throws exception if stack is empty.
 	 * 
-	 * @return top element of stack
+	 * @return top element
 	 */
 	E pop();
 
 	/**
-	 * Adds object parameter to back of stack.
+	 * Insert e at top.
 	 * 
-	 * @param obj
-	 *            object added into stack
-	 * @return true if object was added, false otherwise
+	 * Similar to {@code add(E e)} from collection but specifies behavior.
+	 * 
+	 * @param e
+	 *            element inserted
 	 */
-	boolean push(E obj);
+	void push(E e);
 
 }

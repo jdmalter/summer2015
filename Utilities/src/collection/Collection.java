@@ -10,7 +10,8 @@ import java.util.Iterator;
  * objects. Uses individual and bulk methods. Includes methods to convert
  * collection into an array.
  * 
- * Every concrete subclass and subinterface must implement this interface.
+ * Every concrete subclass and extending interface must implement this
+ * interface.
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
@@ -24,18 +25,22 @@ public interface Collection<E> extends Iterable<E> {
 	 * 
 	 * @param obj
 	 *            object added into collection
-	 * @return true if object was added, false otherwise
+	 * @return true if collection was changed. Elements added must be present
+	 *         after execution. Throws an exception if a collection refuses an
+	 *         element for any reason.
 	 */
 	boolean add(E obj);
 
 	/**
 	 * Adds all elements of collection parameter to collection.
 	 * 
-	 * @param c
+	 * @param coll
 	 *            collection added into collection
-	 * @return true if c was added, false otherwise
+	 * @return true if collection was changed. Elements added must be present
+	 *         after execution. Throws an exception if a collection refuses an
+	 *         element for any reason.
 	 */
-	boolean addAll(Collection<? extends E> c);
+	boolean addAll(Collection<? extends E> coll);
 
 	/**
 	 * Removes all elements in a collection.
@@ -49,7 +54,7 @@ public interface Collection<E> extends Iterable<E> {
 	 *            object compared to collection
 	 * @return true if object belongs to collection, false otherwise
 	 */
-	boolean contains(E obj);
+	boolean contains(Object obj);
 
 	/**
 	 * Tests all objects against elements inside a collection.
@@ -78,9 +83,9 @@ public interface Collection<E> extends Iterable<E> {
 	int hashCode();
 
 	/**
-	 * Checks a collection for elements.
+	 * Returns true if no elements are present.
 	 * 
-	 * @return true if empty, false otherwise
+	 * @return true if no elements are present, false otherwise.
 	 */
 	boolean isEmpty();
 
@@ -96,18 +101,18 @@ public interface Collection<E> extends Iterable<E> {
 	 * 
 	 * @param obj
 	 *            object removed from collection
-	 * @return true if object removed, false otherwise
+	 * @return true if collection was changed by operation, false otherwise
 	 */
-	boolean remove(E obj);
+	boolean remove(Object obj);
 
 	/**
 	 * Removes all elements of collection parameter to collection.
 	 * 
 	 * @param c
 	 *            collection removed from collection
-	 * @return true if c was removed, false otherwise
+	 * @return true if collection was changed by operation, false otherwise
 	 */
-	boolean removeAll(Collection<? extends E> c);
+	boolean removeAll(Collection<?> coll);
 
 	/**
 	 * Retains all elements of collection parameter to collection and removes
@@ -115,12 +120,12 @@ public interface Collection<E> extends Iterable<E> {
 	 * 
 	 * @param c
 	 *            collection retained from collection
-	 * @return true objects removed, false otherwise
+	 * @return true if collection was changed by operation, false otherwise
 	 */
-	boolean retainAll(Collection<? extends E> c);
+	boolean retainAll(Collection<?> coll);
 
 	/**
-	 * Returns the number of elements in a collection.
+	 * Returns number of elements (or INTEGER.MAX_VALUE if that is less).
 	 * 
 	 * @return number of elements
 	 */
@@ -129,18 +134,21 @@ public interface Collection<E> extends Iterable<E> {
 	/**
 	 * Translates a collection into an array.
 	 * 
-	 * @return an array containing all elements
+	 * @return new array of Object
 	 */
-	E[] toArray();
+	Object[] toArray();
 
 	/**
 	 * Translates a collection into an array whose element's type matches the
-	 * parameter array element's type.
+	 * parameter array element's type. Returns new array of type T. Implicitly
+	 * throws ArrayStoreException if elements type E cannot be cast to T.
 	 * 
 	 * @param array
 	 *            array from which element types are taken
-	 * @return an array containing similar typed elements
+	 * @param <T>
+	 *            of components
+	 * @return new array of type T
 	 */
-	E[] toArray(E[] array);
+	<T> T[] toArray(T[] array);
 
 }

@@ -10,6 +10,9 @@ package collection;
  * @param <V>
  *            object data stored in the map
  */
-public interface NavigableMap<K, V> extends SortedMap<K, V>, Navigable<K> {
+public interface NavigableMap<K, V> extends Map<K, V> {
+
+	@Override
+	NavigableSet<K> keys();
 
 }

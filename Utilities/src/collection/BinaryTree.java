@@ -21,25 +21,4 @@ public interface BinaryTree<E> extends Collection<E> {
 	 */
 	BinaryTreeIterator<E> binaryTreeIterator();
 
-	/**
-	 * Creates iterator starting at the left subtree.
-	 * 
-	 * @return BinaryTreeInOrderIterator over elements
-	 */
-	BinaryTreeInOrderIterator<E> binaryTreeInOrderIterator();
-
-	/**
-	 * Creates iterator starting at the root of tree.
-	 * 
-	 * @return BinaryTreePreOrderIterator over elements
-	 */
-	BinaryTreePreOrderIterator<E> binaryTreePreOrderIterator();
-
-	/**
-	 * Creates iterator starting at the left subtree.
-	 * 
-	 * @return BinaryTreePostOrderIterator over elements
-	 */
-	BinaryTreePostOrderIterator<E> binaryTreePostOrderIterator();
-
 }

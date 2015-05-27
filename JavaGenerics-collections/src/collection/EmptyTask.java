@@ -1,4 +1,4 @@
-package collectioninterface;
+package collection;
 
 /**
  * An empty task.

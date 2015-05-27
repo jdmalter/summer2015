@@ -1,4 +1,4 @@
-package collectioninterface;
+package collection;
 
 /**
  * A coding task which contains one string specification.

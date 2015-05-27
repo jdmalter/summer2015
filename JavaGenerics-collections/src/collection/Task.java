@@ -1,4 +1,4 @@
-package collectioninterface;
+package collection;
 
 /**
  * An abstract task that can be compared to other tasks.

@@ -1,4 +1,4 @@
-package collectioninterface;
+package collection;
 
 /**
  * A phone task which contains one name and one number.

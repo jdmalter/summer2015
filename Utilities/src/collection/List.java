@@ -18,6 +18,9 @@ public interface List<E> extends Collection<E> {
 	/**
 	 * Inserts object into a list at parameter index.
 	 * 
+	 * Similar to {@code add(E e)} from collection but implicitly returns true
+	 * or throws an exception.
+	 * 
 	 * @param index
 	 *            position of insertion in a list
 	 * @param obj
@@ -69,7 +72,9 @@ public interface List<E> extends Collection<E> {
 	 * 
 	 * @return ListIterator over elements
 	 */
-	ListIterator<E> listIterator();
+	public default ListIterator<E> listIterator() {
+		return listIterator(0);
+	}
 
 	/**
 	 * Creates iterator starting at parameter index.

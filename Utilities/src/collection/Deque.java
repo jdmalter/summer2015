@@ -19,7 +19,8 @@ public interface Deque<E> extends Queue<E>, Stack<E> {
 	/**
 	 * Insert e at head.
 	 * 
-	 * Similar to {@code add(E e)} from collection but specifies behavior.
+	 * Similar to {@code add(E e)} from collection but implicitly returns true
+	 * or throws an exception.
 	 * 
 	 * @param e
 	 *            element inserted
@@ -29,7 +30,8 @@ public interface Deque<E> extends Queue<E>, Stack<E> {
 	/**
 	 * Insert e at tail.
 	 * 
-	 * Similar to {@code add(E e)} from collection but specifies behavior.
+	 * Similar to {@code add(E e)} from collection but implicitly returns true
+	 * or throws an exception.
 	 * 
 	 * @param e
 	 *            element inserted

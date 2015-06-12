@@ -13,10 +13,10 @@ import java.util.Iterator;
  * Every concrete subclass and extending interface must implement this
  * interface.
  * 
+ * @author Jacob Malter
+ * 
  * @param <E>
  *            The type of the elements stored in this collection.
- * 
- * @author Jacob Malter
  */
 public interface Collection<E> extends Iterable<E> {
 
@@ -63,7 +63,7 @@ public interface Collection<E> extends Iterable<E> {
 	 *            collection compared to collection
 	 * @return true if all objects belong to collection, false otherwise
 	 */
-	boolean containsAll(Collection<? extends E> c);
+	boolean containsAll(Collection<?> c);
 
 	/**
 	 * Equivalence relation must be reflexive (a,a), symmetric (a,b)-->(b,a),
@@ -108,9 +108,11 @@ public interface Collection<E> extends Iterable<E> {
 	/**
 	 * Removes all elements of collection parameter to collection.
 	 * 
-	 * @param c
+	 * @param coll
 	 *            collection removed from collection
 	 * @return true if collection was changed by operation, false otherwise
+	 * @throws NullPointerException
+	 *             when parameter coll is null
 	 */
 	boolean removeAll(Collection<?> coll);
 
@@ -118,9 +120,11 @@ public interface Collection<E> extends Iterable<E> {
 	 * Retains all elements of collection parameter to collection and removes
 	 * other objects.
 	 * 
-	 * @param c
+	 * @param coll
 	 *            collection retained from collection
 	 * @return true if collection was changed by operation, false otherwise
+	 * @throws NullPointerException
+	 *             when parameter coll is null
 	 */
 	boolean retainAll(Collection<?> coll);
 
@@ -148,6 +152,8 @@ public interface Collection<E> extends Iterable<E> {
 	 * @param <T>
 	 *            of components
 	 * @return new array of type T
+	 * @throws ArrayStoreException
+	 *             when element type E cannot be cast to T
 	 */
 	<T> T[] toArray(T[] array);
 

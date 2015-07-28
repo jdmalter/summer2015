@@ -13,6 +13,13 @@ import java.util.Iterator;
 public abstract class AbstractBag<E> extends AbstractCollection<E> implements
 		Bag<E> {
 
+	/**
+	 * Protected from outside use.
+	 */
+	protected AbstractBag() {
+		// Does nothing.
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)

@@ -16,6 +16,13 @@ import java.util.Iterator;
  */
 public abstract class AbstractCollection<E> implements Collection<E> {
 
+	/**
+	 * Protected from outside use.
+	 */
+	protected AbstractCollection() {
+		// Does nothing.
+	}
+
 	@Override
 	public abstract boolean add(E obj);
 

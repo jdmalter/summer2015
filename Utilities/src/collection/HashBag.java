@@ -174,11 +174,15 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 		return obj == null ? 0 : (obj.hashCode() & 0x7FFFFFFF) % table.length;
 	}
 
+	/**
+	 * This implementation ignores changes to underlying HashBag.
+	 */
 	@Override
 	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 
-			private Entry<E>[] iteratorTable = table;
+			private Entry<E>[] iteratorTable = Arrays.copyOf(table,
+					table.length);
 			private int pointer = 0;
 
 			@Override
@@ -190,7 +194,7 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 			public E next() {
 				if (!hasNext())
 					throw new NoSuchElementException(
-							"No more elements remaining in iterator.");
+							"No more elements remaining in iterator");
 
 				Entry<E> entry = iteratorTable[pointer];
 				E result = entry.data;

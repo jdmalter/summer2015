@@ -56,7 +56,7 @@ public interface List<E> extends Collection<E> {
 	 *            object being searched
 	 * @return position of index in list
 	 */
-	int indexOf(E obj);
+	int indexOf(Object obj);
 
 	/**
 	 * Returns index of last instance of an object in list.
@@ -65,7 +65,7 @@ public interface List<E> extends Collection<E> {
 	 *            object being searched
 	 * @return position of index in list
 	 */
-	int lastIndexOf(E obj);
+	int lastIndexOf(Object obj);
 
 	/**
 	 * Creates iterator starting at the front of list.

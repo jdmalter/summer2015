@@ -139,7 +139,7 @@ public interface Deque<E> extends Queue<E>, Stack<E> {
 	/**
 	 * Removes first object from collection.
 	 * 
-	 * Similar to {@code remove(Object o} from collection but specifies
+	 * Similar to {@code remove(Object o)} from collection but specifies
 	 * behavior.
 	 * 
 	 * @param o
@@ -158,7 +158,7 @@ public interface Deque<E> extends Queue<E>, Stack<E> {
 	/**
 	 * Removes last object from collection.
 	 * 
-	 * Similar to {@code remove(Object o} from collection but specifies
+	 * Similar to {@code remove(Object o)} from collection but specifies
 	 * behavior.
 	 * 
 	 * @param o

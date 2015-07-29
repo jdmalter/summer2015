@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class LinkedHashSet<E> extends HashSet<E> {
 
-	public static final Collection<Object> circularCollection = new CircularArray<Object>();
+	public static final Collection<Object> circularCollection = new LinkedList<Object>();
 
 	/** Maintains entries in the order they were stored */
 	private Collection<E> linkedEntries;

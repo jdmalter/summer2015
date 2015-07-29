@@ -15,6 +15,105 @@ import java.util.NoSuchElementException;
 public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 		Deque<E> {
 
+	/**
+	 * List iterator.
+	 * 
+	 * @author Jacob Malter
+	 */
+	protected class LstIterator implements ListIterator<E> {
+
+		protected E[] elements;
+		protected int pointer, lastReturned;
+
+		protected LstIterator() {
+			this(0);
+		}
+
+		protected LstIterator(int index) {
+			try {
+				rangeCheck(index);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new IndexOutOfBoundsException("Iterator index invalid.");
+			}
+
+			this.lastReturned = -1;
+			this.pointer = index;
+			this.elements = (E[]) Arrays.copyOf(data, data.length);
+			// suppressed warning safe since data is type E
+		}
+
+		@Override
+		public void add(E e) {
+			if (lastReturned < 0)
+				throw new IllegalStateException("next nor previous called");
+
+			elements = Arrays.copyOf(elements, elements.length + 1);
+			for (int i = elements.length; i >= pointer;)
+				elements[i] = elements[--i];
+			elements[pointer++ - 1] = e;
+			lastReturned = -1;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pointer < data.length;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return 0 < pointer;
+		}
+
+		@Override
+		public E next() {
+			if (!hasNext())
+				throw new NoSuchElementException(
+						"No more elements remaining in iterator");
+
+			return elements[lastReturned = pointer++];
+		}
+
+		@Override
+		public int nextIndex() {
+			return pointer;
+		}
+
+		@Override
+		public E previous() {
+			if (!hasPrevious())
+				throw new NoSuchElementException(
+						"No more elements remaining in iterator");
+
+			return elements[lastReturned = --pointer];
+		}
+
+		@Override
+		public int previousIndex() {
+			return pointer - 1;
+		}
+
+		@Override
+		public void remove() {
+			if (lastReturned < 0)
+				throw new IllegalStateException("next nor previous called");
+
+			System.arraycopy(elements, lastReturned + 1, elements,
+					lastReturned, elements.length - lastReturned + 1);
+			pointer--;
+			lastReturned = -1;
+		}
+
+		@Override
+		public void set(E e) {
+			if (lastReturned < 0)
+				throw new IllegalStateException("next nor previous called");
+
+			elements[lastReturned] = e;
+			lastReturned = -1;
+		}
+
+	}
+
 	public static final int DEFAULT_CAPACITY = 16;
 	public static final Object[] DEFAULT_ARRAY = new Object[DEFAULT_CAPACITY];
 
@@ -74,10 +173,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@Override
 	public Iterator<E> descendingIterator() {
-		return new Iterator<E>() {
-
-			private E[] elements = Arrays.copyOf(data, data.length);
-			private int pointer = elements.length;
+		return new LstIterator(size()) {
 
 			@Override
 			public boolean hasNext() {
@@ -90,10 +186,11 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 					throw new NoSuchElementException(
 							"No more elements remaining in iterator");
 
-				return elements[--pointer];
+				return elements[lastReturned = --pointer];
 			}
 
 		};
+
 	}
 
 	/**
@@ -128,26 +225,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@Override
 	public Iterator<E> iterator() {
-		return new Iterator<E>() {
-
-			private E[] elements = Arrays.copyOf(data, data.length);
-			private int pointer = 0;
-
-			@Override
-			public boolean hasNext() {
-				return pointer < elements.length;
-			}
-
-			@Override
-			public E next() {
-				if (!hasNext())
-					throw new NoSuchElementException(
-							"No more elements remaining in iterator");
-
-				return elements[pointer++];
-			}
-
-		};
+		return new LstIterator();
 	}
 
 	@Override
@@ -163,85 +241,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@Override
 	public ListIterator<E> listIterator(int index) {
-		try {
-			rangeCheck(index);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new IndexOutOfBoundsException("Iterator index invalid.");
-		}
-
-		return new ListIterator<E>() {
-
-			private E[] elements = Arrays.copyOf(data, data.length);
-			private int pointer = 0, lastReturned = -1;
-
-			@Override
-			public void add(E e) {
-				elements = Arrays.copyOf(elements, elements.length + 1);
-				for (int i = elements.length; i >= pointer;)
-					elements[i] = elements[--i];
-				elements[pointer++ - 1] = e;
-				lastReturned = -1;
-			}
-
-			@Override
-			public boolean hasNext() {
-				return pointer < data.length;
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				return 0 < pointer;
-			}
-
-			@Override
-			public E next() {
-				if (!hasNext())
-					throw new NoSuchElementException(
-							"No more elements remaining in iterator");
-
-				return elements[lastReturned = pointer++];
-			}
-
-			@Override
-			public int nextIndex() {
-				return pointer;
-			}
-
-			@Override
-			public E previous() {
-				if (!hasPrevious())
-					throw new NoSuchElementException(
-							"No more elements remaining in iterator");
-
-				return elements[lastReturned = --pointer];
-			}
-
-			@Override
-			public int previousIndex() {
-				return pointer - 1;
-			}
-
-			@Override
-			public void remove() {
-				if (lastReturned < 0)
-					throw new IllegalStateException("next nor previous called");
-
-				System.arraycopy(elements, lastReturned + 1, elements,
-						lastReturned, elements.length - lastReturned + 1);
-				pointer--;
-				lastReturned = -1;
-			}
-
-			@Override
-			public void set(E e) {
-				if (lastReturned < 0)
-					throw new IllegalStateException("next nor previous called");
-
-				elements[lastReturned] = e;
-				lastReturned = -1;
-			}
-
-		};
+		return new LstIterator(index);
 	}
 
 	/**
@@ -337,35 +337,6 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	@Override
 	public int size() {
 		return size;
-	}
-
-	@Override
-	public List<E> subList(int start, boolean startInclusive, int end,
-			boolean endInclusive) {
-		if (start > end)
-			throw new IllegalArgumentException("Start must be before end");
-		List<E> result = new CircularArray<E>(end - start + 1);
-		ListIterator<E> it;
-
-		if (!startInclusive && !endInclusive) {
-			it = listIterator(start + 1);
-			for (int i = start + 1; i < end; i++)
-				result.add(it.next());
-		} else if (!startInclusive && endInclusive) {
-			it = listIterator(start + 1);
-			for (int i = start + 1; i <= end; i++)
-				result.add(it.next());
-		} else if (startInclusive && !endInclusive) {
-			it = listIterator(start);
-			for (int i = start; i < end; i++)
-				result.add(it.next());
-		} else if (startInclusive && endInclusive) {
-			it = listIterator(start);
-			for (int i = start; i <= end; i++)
-				result.add(it.next());
-		}
-
-		return result;
 	}
 
 	@Override

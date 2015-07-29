@@ -1,5 +1,6 @@
 package collection;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -99,6 +100,35 @@ public abstract class AbstractDequeList<E> extends AbstractDeque<E> implements
 	public boolean removeLastOccurence(Object o) {
 		remove(lastIndexOf(o));
 		return true;
+	}
+
+	@Override
+	public List<E> subList(int start, boolean startInclusive, int end,
+			boolean endInclusive) {
+		if (start > end)
+			throw new IllegalArgumentException("Start must be before end");
+		List<E> result = new LinkedList<E>();
+		Iterator<E> it;
+
+		if (!startInclusive && !endInclusive) {
+			it = listIterator(start + 1);
+			for (int i = start + 1; i < end; i++)
+				result.add(it.next());
+		} else if (!startInclusive && endInclusive) {
+			it = listIterator(start + 1);
+			for (int i = start + 1; i <= end; i++)
+				result.add(it.next());
+		} else if (startInclusive && !endInclusive) {
+			it = listIterator(start);
+			for (int i = start; i < end; i++)
+				result.add(it.next());
+		} else if (startInclusive && endInclusive) {
+			it = listIterator(start);
+			for (int i = start; i <= end; i++)
+				result.add(it.next());
+		}
+
+		return result;
 	}
 
 }

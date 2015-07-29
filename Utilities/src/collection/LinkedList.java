@@ -1,6 +1,7 @@
 package collection;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * A doubly linked container with indices. Operations optimized near the start
@@ -13,6 +14,111 @@ import java.util.Iterator;
  */
 public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 		Deque<E> {
+
+	/**
+	 * List iterator.
+	 * 
+	 * @author Jacob Malter
+	 */
+	protected class LstIterator implements ListIterator<E> {
+
+		protected Node<E> pointer, lastReturned;
+		protected int pointerIndex;
+
+		protected LstIterator() {
+			this(0);
+		}
+
+		protected LstIterator(int index) {
+			try {
+				rangeCheck(index);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				throw new IndexOutOfBoundsException("Iterator index invalid.");
+			}
+
+			pointer = head;
+			for (int i = 0; i < index; i++) {
+				pointer = pointer.next;
+				pointerIndex++;
+			}
+		}
+
+		@Override
+		public void add(E e) {
+			if (lastReturned == null)
+				throw new IllegalStateException("next nor previous called");
+
+			Node<E> insert = new Node<E>(e, lastReturned.next, lastReturned);
+			lastReturned.next = insert;
+			pointerIndex++;
+			lastReturned = null;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pointer != null;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return pointer.prev != null;
+		}
+
+		@Override
+		public E next() {
+			if (!hasNext())
+				throw new NoSuchElementException(
+						"No more elements remaining in iterator");
+
+			E result = pointer.data;
+			lastReturned = pointer;
+			pointer = pointer.next;
+			pointerIndex++;
+			return result;
+		}
+
+		@Override
+		public int nextIndex() {
+			return pointerIndex;
+		}
+
+		@Override
+		public E previous() {
+			if (!hasPrevious())
+				throw new NoSuchElementException(
+						"No more elements remaining in iterator");
+
+			lastReturned = pointer;
+			pointer = pointer.prev;
+			pointerIndex--;
+			return pointer.data;
+		}
+
+		@Override
+		public int previousIndex() {
+			return pointerIndex - 1;
+		}
+
+		@Override
+		public void remove() {
+			if (lastReturned == null)
+				throw new IllegalStateException("next nor previous called");
+
+			lastReturned.prev.next = lastReturned.next;
+			pointerIndex--;
+			lastReturned = null;
+		}
+
+		@Override
+		public void set(E e) {
+			if (lastReturned == null)
+				throw new IllegalStateException("next nor previous called");
+
+			lastReturned.data = e;
+			lastReturned = null;
+		}
+
+	}
 
 	/**
 	 * One node containing data and links.
@@ -119,21 +225,26 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 
 	@Override
 	public Iterator<E> descendingIterator() {
-		return new Iterator<E>() {
+		return new LstIterator(size()) {
 
 			@Override
 			public boolean hasNext() {
-				// TODO Auto-generated method stub
-				return false;
+				return pointer != null;
 			}
 
 			@Override
 			public E next() {
-				// TODO Auto-generated method stub
-				return null;
+				if (!hasNext())
+					throw new NoSuchElementException(
+							"No more elements remaining in iterator");
+
+				E result = pointer.data;
+				pointer = pointer.prev;
+				return result;
 			}
 
 		};
+
 	}
 
 	@Override
@@ -167,21 +278,7 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 
 	@Override
 	public Iterator<E> iterator() {
-		return new Iterator<E>() {
-
-			@Override
-			public boolean hasNext() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public E next() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-		};
+		return new LstIterator();
 	}
 
 	@Override
@@ -230,69 +327,7 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 
 	@Override
 	public ListIterator<E> listIterator(int index) {
-		try {
-			rangeCheck(index);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new IndexOutOfBoundsException("Iterator index invalid.");
-		}
-
-		return new ListIterator<E>(index) {
-
-			@Override
-			public boolean hasNext() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public boolean hasPrevious() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public E next() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public E previous() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void add(E e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public int nextIndex() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public int previousIndex() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public void remove() {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void set(E e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		};
+		return new LstIterator(index);
 	}
 
 	/**
@@ -348,13 +383,6 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 	@Override
 	public int size() {
 		return size;
-	}
-
-	@Override
-	public List<E> subList(int start, boolean startInclusive, int end,
-			boolean endInclusive) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

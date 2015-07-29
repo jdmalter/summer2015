@@ -21,8 +21,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	/** memory for data */
 	private E[] data;
 	/**
-	 * index of first element, number of elements, index of last element, number
-	 * of changes
+	 * index of first element, number of elements, index of last element
 	 */
 	private int head, size, tail;
 
@@ -183,7 +182,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 				elements[pointer++ - 1] = e;
 				lastReturned = -1;
 			}
-			
+
 			@Override
 			public boolean hasNext() {
 				return pointer < data.length;
@@ -207,7 +206,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 			public int nextIndex() {
 				return pointer;
 			}
-			
+
 			@Override
 			public E previous() {
 				if (!hasPrevious())
@@ -339,7 +338,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	public int size() {
 		return size;
 	}
-	
+
 	@Override
 	public List<E> subList(int start, boolean startInclusive, int end,
 			boolean endInclusive) {

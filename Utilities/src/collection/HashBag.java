@@ -42,24 +42,6 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 			this.next = next;
 		}
 
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == this)
-				return true;
-			if (null == obj)
-				return false;
-			if (!(obj instanceof Entry<?>))
-				return false;
-			Entry<?> other = (Entry<?>) obj;
-
-			return data.equals(other.data);
-		}
-
-		@Override
-		public int hashCode() {
-			return data.hashCode();
-		}
-
 	}
 
 	/** prime number */
@@ -78,21 +60,7 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 	 * Constructs HashBag with default capacity and default load.
 	 */
 	public HashBag() {
-		this(DEFAULT_CAPACITY, DEFAULT_LOAD);
-	}
-
-	/**
-	 * Constructs HashBag with parameter capacity and default load.
-	 *
-	 * Note: capacity subject to grow.
-	 *
-	 * @param capacity
-	 *            beginning capacity
-	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1}
-	 */
-	public HashBag(int initCapacity) {
-		this(initCapacity, DEFAULT_LOAD);
+		this(DEFAULT_CAPACITY);
 	}
 
 	/**
@@ -102,24 +70,16 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 	 * 
 	 * @param capacity
 	 *            beginning capacity
-	 * @param load
-	 *            beginning load
 	 * @throws IllegalArgumentException
 	 *             when {@code initCapacity < 1} or
-	 *             {@code initLoad <= 0 || 1 < initLoad}
 	 */
 	@SuppressWarnings("unchecked")
-	public HashBag(int initCapacity, float initLoad) {
+	public HashBag(int initCapacity) {
 		if (initCapacity < 1)
 			throw new IllegalArgumentException("capacity (" + initCapacity
 					+ ") cannot be less than one");
-		if (initLoad <= 0 || 1 < initLoad)
-			throw new IllegalArgumentException(
-					"load ("
-							+ initLoad
-							+ ") cannot be less than or equal to zero or greater than one");
 
-		load = initLoad;
+		load = DEFAULT_LOAD;
 		table = new Entry[initCapacity]; // suppressed warning safe since only
 											// elements of type E will be
 											// inserted
@@ -151,6 +111,11 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 		Entry<E> current = null;
 
 		if (prev != null) {
+			// Check top bucket
+			if (prev.data == null ? obj == null : prev.data.equals(obj))
+				return true;
+
+			// check lower buckets
 			current = prev.next;
 			while (current != null) {
 				if (current.data == null ? obj == null : current.data
@@ -235,6 +200,13 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 		Entry<E> current = null;
 
 		if (prev != null) {
+			// Check top bucket
+			if (prev.data == null ? obj == null : prev.data.equals(obj)) {
+				prev = prev.next;
+				return true;
+			}
+
+			// Check lower buckets
 			current = prev.next;
 			while (current != null) {
 				if (current.data == null ? obj == null : current.data

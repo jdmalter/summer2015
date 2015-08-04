@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class LinkedHashSet<E> extends HashSet<E> {
 
-	public static final Collection<Object> circularCollection = new LinkedList<Object>();
+	public static final Collection<Object> linkedCollection = new LinkedList<Object>();
 
 	/** Maintains entries in the order they were stored */
 	private Collection<E> linkedEntries;
@@ -38,12 +38,9 @@ public class LinkedHashSet<E> extends HashSet<E> {
 	@SuppressWarnings("unchecked")
 	public LinkedHashSet(int initCapacity) {
 		super(initCapacity);
-		linkedEntries = (Collection<E>) circularCollection; // suppressed
-															// warning safe
-															// since only
-															// elements of type
-															// E will be
-															// inserted
+		linkedEntries = (Collection<E>) linkedCollection;
+		// suppressed warning safe since only elements of type E will be
+		// inserted
 	}
 
 	@Override

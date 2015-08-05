@@ -13,7 +13,7 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface Set<E> extends Bag<E> {
+public interface Set<E> extends Multiset<E> {
 
 	/**
 	 * Adds object parameter to collection if it is unique. Duplicate objects

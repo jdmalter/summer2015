@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A bag implemented through hashing.
+ * A multiset implemented through hashing.
  * 
  * @author Jacob Malter
  *
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
+public class HashMultiset<E> extends AbstractMultiset<E> {
 
 	/**
 	 * A single entry in the hash array.
@@ -59,7 +59,7 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 	/**
 	 * Constructs HashBag with default capacity and default load.
 	 */
-	public HashBag() {
+	public HashMultiset() {
 		this(DEFAULT_CAPACITY);
 	}
 
@@ -74,7 +74,7 @@ public class HashBag<E> extends AbstractBag<E> implements Bag<E> {
 	 *             when {@code initCapacity < 1} or
 	 */
 	@SuppressWarnings("unchecked")
-	public HashBag(int initCapacity) {
+	public HashMultiset(int initCapacity) {
 		if (initCapacity < 1)
 			throw new IllegalArgumentException("capacity (" + initCapacity
 					+ ") cannot be less than one");

@@ -13,7 +13,7 @@ package collection;
  * 
  * @author Jacob Malter
  */
-public interface Bag<E> extends Collection<E> {
+public interface Multiset<E> extends Collection<E> {
 
 	/**
 	 * Equivalence relation must be reflexive (a,a), symmetric (a,b)-->(b,a),

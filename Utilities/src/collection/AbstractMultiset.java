@@ -3,20 +3,20 @@ package collection;
 import java.util.Iterator;
 
 /**
- * A skeletal implementation of the bag (and set) interface.
+ * A skeletal implementation of the multiset (and set) interface.
  * 
  * @author Jacob Malter
  *
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public abstract class AbstractBag<E> extends AbstractCollection<E> implements
-		Bag<E> {
+public abstract class AbstractMultiset<E> extends AbstractCollection<E> implements
+		Multiset<E> {
 
 	/**
 	 * Protected from outside use.
 	 */
-	protected AbstractBag() {
+	protected AbstractMultiset() {
 		// Does nothing.
 	}
 
@@ -26,7 +26,7 @@ public abstract class AbstractBag<E> extends AbstractCollection<E> implements
 			return true;
 		if (null == obj)
 			return false;
-		if (!(obj instanceof AbstractBag<?>))
+		if (!(obj instanceof AbstractMultiset<?>))
 			return false;
 		Collection<?> other = (Collection<?>) obj;
 

@@ -1,7 +1,7 @@
 package collection;
 
 /**
- * A set extended from HashBag. Add method is refined to not accept duplicates
+ * A set extended from HashMultiset. Add method is refined to not accept duplicates
  * which brakes complete substitutability.
  * 
  * @author Jacob Malter
@@ -9,7 +9,7 @@ package collection;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class HashSet<E> extends HashBag<E> implements Set<E> {
+public class HashSet<E> extends HashMultiset<E> implements Set<E> {
 
 	/**
 	 * Constructs HashSet with default capacity and default load.

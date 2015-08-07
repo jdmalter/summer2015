@@ -11,59 +11,72 @@ import java.util.Iterator;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class TreeMultiset<E extends Comparable<? super E>> extends
-		AbstractMultiset<E> implements Multiset<E> {
+public class TreeMultiset<E> extends AbstractMultiset<E> implements
+		Multiset<E>, Navigable<E> {
 
 	/**
-	 * Tree in order iterator.
+	 * Tree in order iterator. Credit to LeetCode for simple idea of using a
+	 * stack implement iterator.
 	 * 
 	 * @author Jacob Malter
 	 *
 	 */
 	private class TreeIterator implements Iterator<E> {
-
-		Node<E> pointer;
-
-		private TreeIterator() {
-			pointer = getLeast();
-		}
+		Stack<Node<E>> stack;
+		private boolean movesForward;
 
 		/**
-		 * Finds node with no left children and therefore lowest value.
+		 * Creates an in-order TreeIterator given a direction.
 		 * 
-		 * @return node to complete left
+		 * @param movesForward
+		 *            ? starts at lowest and goes to highest : starts at highest
+		 *            and goes to lowest
 		 */
-		private Node<E> getLeast() {
+		private TreeIterator(boolean movesForward) {
+			this.movesForward = movesForward;
+			stack = new CircularArray<Node<E>>();
 			Node<E> current = root;
-
-			if (current == null)
-				return null;
-
-			while (current.left != null)
-				current = current.left;
-
-			return current;
+			if (movesForward) {
+				while (current != null) {
+					stack.push(current);
+					current = current.left;
+				}
+			} else {
+				while (current != null) {
+					stack.push(current);
+					current = current.right;
+				}
+			}
 		}
 
 		@Override
 		public boolean hasNext() {
-			return pointer != null;
+			return !stack.isEmpty();
 		}
 
 		@Override
 		public E next() {
-			E result = pointer.data;
-			if (pointer.left != null)
-				pointer = pointer.left;
-			else if (pointer.parent != null)
-				pointer = pointer.parent;
-			else if (pointer.right != null)
-				pointer = pointer.left;
-			else
-				pointer = null;
+			Node<E> node = stack.pop();
+			E result = node.data;
+			if (movesForward) {
+				if (node.right != null) {
+					node = node.right;
+					while (node != null) {
+						stack.push(node);
+						node = node.left;
+					}
+				}
+			} else {
+				if (node.left != null) {
+					node = node.left;
+					while (node != null) {
+						stack.push(node);
+						node = node.right;
+					}
+				}
+			}
 			return result;
 		}
-
 	}
 
 	/**
@@ -115,10 +128,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 
 	@Override
 	public boolean add(E obj) {
-		Node<E> insert = new Node<E>(obj, null, null, null);
-		boolean flag = rbAdd(insert);
-		recolorAdd(insert);
-		return flag;
+		return rbAdd(new Node<E>(obj, null, null, null));
 	}
 
 	/**
@@ -194,12 +204,26 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		return false;
 	}
 
+	@Override
+	public E ceiling(E e) {
+		Iterator<E> it = descendingIterator();
+		E current = null, prev = null;
+		while (it.hasNext()) {
+			prev = current;
+			current = it.next();
+			if (compare(comparator(), current, e) < 0)
+				return prev;
+		}
+		return null;
+	}
+
 	/**
-	 * Finds least node greater than target.
+	 * Behaves differently that its overloaded counterpart. Used to find a
+	 * replacement node.
 	 * 
 	 * @param target
-	 *            starting point
-	 * @return least node
+	 *            node to find ceiling of
+	 * @return ceiling of target
 	 */
 	private Node<E> ceiling(Node<E> target) {
 		Node<E> ceilingCurrent = target.right;
@@ -226,33 +250,36 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		return comparator;
 	}
 
-	/**
-	 * Compares two objects for ordering.
-	 * 
-	 * @param e1
-	 *            first object
-	 * @param e2
-	 *            second object
-	 * @return negative, zero, or positive integer if the first object is less
-	 *         than, equal to, or greater than the second object
-	 */
-	private int compare(E e1, E e2) {
-		return comparator == null ? ((e1 == null || e2 == null) ? (e1 == e2 ? 0
-				: (e1 == null) ? -1 : 1) : e1.compareTo(e2)) : comparator
-				.compare(e1, e2);
-	}
-
 	@Override
 	public boolean contains(Object obj) {
 		return getNode(obj) != null;
 	}
 
+	@Override
+	public Iterator<E> descendingIterator() {
+		return new TreeIterator(false);
+	}
+
+	@Override
+	public E floor(E e) {
+		Iterator<E> it = iterator();
+		E current = null, prev = null;
+		while (it.hasNext()) {
+			prev = current;
+			current = it.next();
+			if (compare(comparator(), current, e) > 0)
+				return prev;
+		}
+		return null;
+	}
+
 	/**
-	 * Finds greatest node less than target.
+	 * Behaves differently that its overloaded counterpart. Used to find a
+	 * replacement node.
 	 * 
 	 * @param target
-	 *            starting point
-	 * @return greatest node
+	 *            node to find floor of
+	 * @return floor of target
 	 */
 	private Node<E> floor(Node<E> target) {
 		Node<E> floorCurrent = target.left;
@@ -264,6 +291,13 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		return floorPrev;
 	}
 
+	/**
+	 * Returns a node with data equal to given object.
+	 * 
+	 * @param obj
+	 *            queried object
+	 * @return node with data equal to given object or null
+	 */
 	private Node<E> getNode(Object obj) {
 		try {
 			@SuppressWarnings("unchecked")
@@ -276,15 +310,15 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 
 			// Find correct spot
 			Node<E> current = root;
-			do {
-				int comparison = compare(target, current.data);
+			while (current != null) {
+				int comparison = compare(comparator(), target, current.data);
 				if (comparison < 0)
 					current = current.left;
 				else if (comparison > 0)
 					current = current.right;
 				else
 					return current;
-			} while (current != null);
+			}
 
 		} catch (ClassCastException e) {
 			return null;
@@ -295,10 +329,87 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	}
 
 	@Override
-	public Iterator<E> iterator() {
-		return new TreeIterator();
+	public E higher(E e) {
+		Iterator<E> it = descendingIterator();
+		E current = null, prev = null;
+		while (it.hasNext()) {
+			prev = current;
+			current = it.next();
+			if (compare(comparator(), current, e) <= 0)
+				return prev;
+		}
+		return null;
 	}
 
+	@Override
+	public Iterator<E> iterator() {
+		return new TreeIterator(true);
+	}
+
+	@Override
+	public E lower(E e) {
+		Iterator<E> it = iterator();
+		E current = null, prev = null;
+		while (it.hasNext()) {
+			prev = current;
+			current = it.next();
+			if (compare(comparator(), current, e) >= 0)
+				return prev;
+		}
+		return null;
+	}
+
+	@Override
+	public E maximum() {
+		return maximumNode().data;
+	}
+
+	/**
+	 * Performs like maximum but for nodes.
+	 * 
+	 * @return greatest node
+	 */
+	private Node<E> maximumNode() {
+		Node<E> current = root;
+
+		if (current == null)
+			return null;
+
+		while (current.right != null)
+			current = current.right;
+
+		return current;
+	}
+
+	@Override
+	public E minimum() {
+		return minimumNode().data;
+	}
+
+	/**
+	 * Performs like minimum but for nodes.
+	 * 
+	 * @return least node
+	 */
+	private Node<E> minimumNode() {
+		Node<E> current = root;
+
+		if (current == null)
+			return null;
+
+		while (current.left != null)
+			current = current.left;
+
+		return current;
+	}
+
+	/**
+	 * Typical binary search tree add using a node.
+	 * 
+	 * @param node
+	 *            contains data being inserted
+	 * @return true if operation changed collection, false otherwise
+	 */
 	private boolean rbAdd(Node<E> node) {
 
 		// Root case
@@ -311,28 +422,32 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		// Find correct spot
 		Node<E> current = root;
 		Node<E> prev = root.parent;
-		do {
-			int comparison = compare(node.data, current.data);
-			prev = current.parent;
+		while (current != null) {
+			int comparison = compare(comparator(), node.data, current.data);
+			prev = current;
 			if (comparison < 0)
 				current = current.left;
-			else if (comparison > 0)
+			else if (comparison >= 0)
 				current = current.right;
-		} while (current != null);
+		}
 
 		// Insert node
 		node.parent = prev;
-		int comparison = compare(node.data, prev.data);
+		int comparison = compare(comparator(), node.data, prev.data);
 		if (comparison < 0) {
 			prev.left = node;
+			recolorAdd(prev.left);
 		} else if (comparison > 0) {
 			prev.right = node;
+			recolorAdd(prev.right);
 		} else {
-			if (prev.right == null)
+			if (prev.right == null) {
 				prev.right = node;
-			else if (prev.left == null)
+				recolorAdd(prev.right);
+			} else if (prev.left == null) {
 				prev.left = node;
-			else
+				recolorAdd(prev.left);
+			} else
 				throw new AssertionError("rbAdd: Logically unreachable.");
 		}
 
@@ -340,6 +455,13 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		return true;
 	}
 
+	/**
+	 * Typical binary search tree remove using a node.
+	 * 
+	 * @param node
+	 *            marked node for removal
+	 * @return true if operation changed collection, false otherwise
+	 */
 	private boolean rbRemove(Node<E> node) {
 		if (node == null)
 			return false;
@@ -371,8 +493,9 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 			Node<E> ceiling = ceiling(current);
 
 			// Find which node is closer to current
-			Node<E> currentCandidate = compare(floor.data, current.data) < compare(
-					current.data, ceiling.data) ? floor : ceiling;
+			Node<E> currentCandidate = compare(comparator(), floor.data,
+					current.data) < compare(comparator(), current.data,
+					ceiling.data) ? floor : ceiling;
 
 			// Replace current node with candidate
 			if (currentCandidate == current) {

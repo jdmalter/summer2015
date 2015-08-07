@@ -13,13 +13,6 @@ import java.util.Iterator;
 public abstract class AbstractMultiset<E> extends AbstractCollection<E> implements
 		Multiset<E> {
 
-	/**
-	 * Protected from outside use.
-	 */
-	protected AbstractMultiset() {
-		// Does nothing.
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)

@@ -64,7 +64,7 @@ public class Arrays {
 			firstHalf[i] = array[i];
 		T[] secondHalf = (T[]) new Object[array.length - half];
 		for (int i = half; i < array.length; i++)
-			firstHalf[i] = array[i];
+			secondHalf[i] = array[i];
 
 		mergeSort(firstHalf);
 		mergeSort(secondHalf);
@@ -122,7 +122,7 @@ public class Arrays {
 		for (int i = 0; i < array.length; i++) {
 			int min = i;
 			for (int j = i + 1; j < array.length; j++) {
-				min = ((Comparable<Object>) array[j]).compareTo(min) < 0 ? j
+				min = ((Comparable<Object>) array[j]).compareTo(array[min]) < 0 ? j
 						: min;
 			}
 			swap(array, i, min);

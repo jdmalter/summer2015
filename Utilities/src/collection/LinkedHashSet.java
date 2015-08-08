@@ -13,8 +13,6 @@ import java.util.Iterator;
  */
 public class LinkedHashSet<E> extends HashSet<E> {
 
-	public static final Collection<Object> linkedCollection = new LinkedList<Object>();
-
 	/** Maintains entries in the order they were stored */
 	private Collection<E> linkedEntries;
 
@@ -38,9 +36,8 @@ public class LinkedHashSet<E> extends HashSet<E> {
 	@SuppressWarnings("unchecked")
 	public LinkedHashSet(int initCapacity) {
 		super(initCapacity);
-		linkedEntries = (Collection<E>) linkedCollection;
-		// suppressed warning safe since only elements of type E will be
-		// inserted
+		linkedEntries = (Collection<E>) Collections.ITERABLE_AND_REMOVE_COLLECTION;
+		// suppression safe since only elements of type E will be inserted
 	}
 
 	@Override
@@ -57,9 +54,6 @@ public class LinkedHashSet<E> extends HashSet<E> {
 		super.clear();
 	}
 
-	/**
-	 * This implementation returns a linked iterator.
-	 */
 	@Override
 	public Iterator<E> iterator() {
 		return linkedEntries.iterator();

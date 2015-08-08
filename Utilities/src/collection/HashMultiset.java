@@ -80,9 +80,8 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 					+ ") cannot be less than one");
 
 		load = DEFAULT_LOAD;
-		table = new Entry[initCapacity]; // suppressed warning safe since only
-											// elements of type E will be
-											// inserted
+		table = new Entry[initCapacity];
+		// suppression safe since only elements of type E will be inserted
 	}
 
 	@Override
@@ -179,9 +178,8 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	@SuppressWarnings("unchecked")
 	private void rehash() {
 		Entry<E>[] oldTable = Arrays.copyOf(table, table.length);
-		table = new Entry[table.length * 2 + 1]; // suppressed warning safe
-													// since only elements of
-													// type E will be inserted
+		table = new Entry[table.length * 2 + 1];
+		// suppression safe since only elements of type E will be inserted
 
 		// add old elements
 		for (int j = 0; j < table.length; j++) {

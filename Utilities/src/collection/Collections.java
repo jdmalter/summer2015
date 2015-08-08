@@ -10,6 +10,8 @@ import java.util.Random;
  */
 public class Collections {
 
+	public static final Collection<?> EMPTY_COLLECTION = new CircularArray<Object>();
+	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArray<Object>();
 	private static final int QUICK_TO_INSERT_SORT = 24;
 
 	private Collections() {

@@ -70,6 +70,25 @@ public class Arrays {
 	}
 
 	/**
+	 * Returns the greatest element within a given array.
+	 * 
+	 * This implementation returns the index of the first occurrence of max.
+	 * 
+	 * @param array
+	 *            contains elements
+	 * @return greatest element
+	 */
+	public static <T extends Comparable<? super T>> T maximum(T[] array) {
+		if (array.length == 0)
+			return null;
+		T max = array[0];
+		for (int i = 1; i < array.length; i++)
+			if (max.compareTo(array[i]) < 0)
+				max = array[i];
+		return max;
+	}
+
+	/**
 	 * Recursively sorts an array by merging sorted halves. Its main advantages
 	 * are stability and predictable performance on large arrays. Reasonable on
 	 * larger arrays (greater than few dozen).
@@ -113,6 +132,89 @@ public class Arrays {
 	}
 
 	/**
+	 * Returns the least element within a given array.
+	 * 
+	 * This implementation returns the index of the first occurrence of min.
+	 * 
+	 * @param array
+	 *            contains elements
+	 * @return least element
+	 */
+	public static <T extends Comparable<? super T>> T minimum(T[] array) {
+		if (array.length == 0)
+			return null;
+		T min = array[0];
+		for (int i = 1; i < array.length; i++)
+			if (min.compareTo(array[i]) > 0)
+				min = array[i];
+		return min;
+	}
+
+	/**
+	 * Cuts an array into two parts. Elements at the front less than the pivot
+	 * and elements at the end greater than the pivot. Ideally, each part is
+	 * 50/50 split. 10/90 split is bounded by O(nlog(n)). Worst case, the pivot
+	 * is at the end.
+	 * 
+	 * @param array
+	 *            target array being partitioned
+	 * @param first
+	 *            where first part starts
+	 * @param last
+	 *            where second part starts
+	 * @param pivot
+	 *            element used to divide other elements
+	 * @return pivot index
+	 */
+	private static <T extends Comparable<? super T>> int partition(T[] array,
+			int first, int last, T pivot) {
+		int i = first;
+		for (int j = first + 1; j < last; j++)
+			if ((array[j]).compareTo(pivot) <= 0)
+				swap(array, ++i, j);
+		swap(array, first, i);
+		return i;
+	}
+
+	/**
+	 * Reasonable as general purpose sorting. Relies on insertion sort for small
+	 * lists. Uses randomized pivots to reduce worse-case scenarios. With
+	 * tuning, runs much faster than mergesort.
+	 * 
+	 * Stability: Equal elements are changed.
+	 * 
+	 * Extra space: O(1)
+	 * 
+	 * Comparisons: O(n^2) but typically O(nlog(n))
+	 * 
+	 * Swaps: O(n^2) but typically O(nlog(n))
+	 * 
+	 * @param array
+	 *            target array with elements
+	 */
+	public static <T extends Comparable<? super T>> void quickSort(T[] array) {
+		quickSort(array, 0, array.length);
+	}
+
+	private static <T extends Comparable<? super T>> void quickSort(T[] array,
+			int first, int last) {
+		if (array.length < 2)
+			return;
+		if (array.length < QUICK_TO_INSERT_SORT)
+			insertionSort(array);
+		else if (first < last) {
+			int pivot = randomPartition(array, first, last);
+			if (pivot < array.length / 2) {
+				quickSort(array, first, pivot - 1);
+				quickSort(array, pivot + 1, last);
+			} else {
+				quickSort(array, pivot + 1, last);
+				quickSort(array, first, pivot - 1);
+			}
+		}
+	}
+
+	/**
 	 * Cuts an array into two parts. Elements at the front less than the pivot
 	 * and elements at the end greater than the pivot. Ideally, each part is
 	 * 50/50 split. 10/90 split is bounded by O(nlog(n)). Worst case, the pivot
@@ -128,16 +230,10 @@ public class Arrays {
 	 *            where second part starts
 	 * @return pivot index
 	 */
-	private static <T extends Comparable<? super T>> int partition(T[] array,
-			int first, int last) {
-		swap(array, first, last - 1);
-		T pivot = array[new Random().nextInt(last)];
-		int i = first;
-		for (int j = first + 1; j < last; j++)
-			if ((array[j]).compareTo(pivot) <= 0)
-				swap(array, ++i, j);
-		swap(array, first, i);
-		return i;
+	private static <T extends Comparable<? super T>> int randomPartition(
+			T[] array, int first, int last) {
+		swap(array, first, new Random().nextInt(last));
+		return partition(array, first, last, array[first]);
 	}
 
 	/**
@@ -156,7 +252,7 @@ public class Arrays {
 		if (lastIndex < firstIndex)
 			throw new IllegalArgumentException("firstIndex (" + firstIndex
 					+ ") is greater than lastIndex (" + lastIndex + ")");
-		if (lastIndex > arrayLength)
+		if (lastIndex >= arrayLength)
 			throw new ArrayIndexOutOfBoundsException(lastIndex);
 		if (firstIndex < 0)
 			throw new ArrayIndexOutOfBoundsException(firstIndex);
@@ -221,44 +317,6 @@ public class Arrays {
 		T temp = array[firstIndex];
 		array[firstIndex] = array[lastIndex];
 		array[lastIndex] = temp;
-	}
-
-	/**
-	 * Reasonable as general purpose sorting. Relies on insertion sort for small
-	 * lists. Uses randomized pivots to reduce worse-case scenarios. With
-	 * tuning, runs much faster than mergesort.
-	 * 
-	 * Stability: Equal elements are changed.
-	 * 
-	 * Extra space: O(1)
-	 * 
-	 * Comparisons: O(n^2) but typically O(nlog(n))
-	 * 
-	 * Swaps: O(n^2) but typically O(nlog(n))
-	 * 
-	 * @param array
-	 *            target array with elements
-	 */
-	public static <T extends Comparable<? super T>> void quickSort(T[] array) {
-		quickSort(array, 0, array.length);
-	}
-
-	private static <T extends Comparable<? super T>> void quickSort(T[] array,
-			int first, int last) {
-		if (array.length < 2)
-			return;
-		if (array.length < QUICK_TO_INSERT_SORT)
-			insertionSort(array);
-		else if (first < last) {
-			int pivot = partition(array, first, last);
-			if (pivot < array.length / 2) {
-				quickSort(array, first, pivot - 1);
-				quickSort(array, pivot + 1, last);
-			} else {
-				quickSort(array, pivot + 1, last);
-				quickSort(array, first, pivot - 1);
-			}
-		}
 	}
 
 }

@@ -70,6 +70,26 @@ public class Collections {
 	}
 
 	/**
+	 * Returns the greatest element within a given list.
+	 * 
+	 * This implementation returns the index of the first occurrence of max.
+	 * 
+	 * @param list
+	 *            contains elements
+	 * @return greatest element
+	 */
+	public static <T extends Comparable<? super T>> T maximum(List<T> list) {
+		if (list.size() == 0)
+			return null;
+		T max = list.get(0);
+		for (int i = 1; i < list.size(); i++) {
+			T current = list.get(i);
+			max = max.compareTo(current) < 0 ? current : max;
+		}
+		return max;
+	}
+
+	/**
 	 * Recursively sorts a list by merging sorted halves. Its main advantages
 	 * are stability and predictable performance on large lists. Reasonable on
 	 * larger lists (greater than few dozen).
@@ -113,6 +133,92 @@ public class Collections {
 	}
 
 	/**
+	 * Returns the least element within a given list.
+	 * 
+	 * This implementation returns the index of the first occurrence of min.
+	 * 
+	 * @param list
+	 *            contains elements
+	 * @return least element
+	 */
+	public static <T extends Comparable<? super T>> T minimum(List<T> list) {
+		if (list.size() == 0)
+			return null;
+		T min = list.get(0);
+		for (int i = 1; i < list.size(); i++) {
+			T current = list.get(i);
+			min = min.compareTo(current) > 0 ? current : min;
+		}
+		return min;
+	}
+
+	/**
+	 * Cuts a list into two parts. Elements at the front less than the pivot and
+	 * elements at the end greater than the pivot. Ideally, each part is 50/50
+	 * split. 10/90 split is bounded by O(nlog(n)). Worst case, the pivot is at
+	 * the end.
+	 * 
+	 * This implementation picks its pivot as the first element.
+	 * 
+	 * @param list
+	 *            target list being partitioned
+	 * @param first
+	 *            where first part starts
+	 * @param last
+	 *            where second part starts
+	 * @param pivot
+	 *            element used to divide other elements
+	 * @return pivot index
+	 */
+	private static <T extends Comparable<? super T>> int partition(
+			List<T> list, int first, int last, T pivot) {
+		int i = first;
+		for (int j = first + 1; j < last; j++)
+			if ((list.get(j)).compareTo(pivot) <= 0)
+				swap(list, ++i, j);
+		swap(list, first, i);
+		return i;
+	}
+
+	/**
+	 * Reasonable as general purpose sorting. Relies on insertion sort for small
+	 * lists. Uses randomized pivots to reduce worse-case scenarios. With
+	 * tuning, runs much faster than mergesort.
+	 * 
+	 * Stability: Equal elements are changed.
+	 * 
+	 * Extra space: O(1)
+	 * 
+	 * Comparisons: O(n^2) but typically O(nlog(n))
+	 * 
+	 * Swaps: O(n^2) but typically O(nlog(n))
+	 * 
+	 * @param list
+	 *            target list with elements
+	 */
+	public static <T extends Comparable<? super T>> void quickSort(List<T> list) {
+		quickSort(list, 0, list.size());
+	}
+
+	private static <T extends Comparable<? super T>> void quickSort(
+			List<T> list, int first, int last) {
+		if (list.size() < 2)
+			return;
+		if (list.size() < QUICK_TO_INSERT_SORT)
+			insertionSort(list);
+		else if (first < last) {
+			int pivot = randomPartition(list, first, last);
+			if (pivot < list.size() / 2) {
+				quickSort(list, first, pivot - 1);
+				quickSort(list, pivot + 1, last);
+			} else {
+				quickSort(list, pivot + 1, last);
+				quickSort(list, first, pivot - 1);
+			}
+		}
+	}
+
+	/**
 	 * Cuts an list into two parts. Elements at the front less than the pivot
 	 * and elements at the end greater than the pivot. Ideally, each part is
 	 * 50/50 split. 10/90 split is bounded by O(nlog(n)). Worst case, the pivot
@@ -128,16 +234,10 @@ public class Collections {
 	 *            where second part starts
 	 * @return pivot index
 	 */
-	private static <T extends Comparable<? super T>> int partition(
+	private static <T extends Comparable<? super T>> int randomPartition(
 			List<T> list, int first, int last) {
-		swap(list, first, last - 1);
-		T pivot = list.get(new Random().nextInt(last));
-		int i = first;
-		for (int j = first + 1; j < last; j++)
-			if ((list.get(j)).compareTo(pivot) <= 0)
-				swap(list, ++i, j);
-		swap(list, first, i);
-		return i;
+		swap(list, first, new Random().nextInt(last));
+		return partition(list, first, last, list.get(first));
 	}
 
 	/**
@@ -155,7 +255,7 @@ public class Collections {
 		if (lastIndex < firstIndex)
 			throw new IllegalArgumentException("firstIndex (" + firstIndex
 					+ ") is greater than lastIndex (" + lastIndex + ")");
-		if (lastIndex > listLength)
+		if (lastIndex >= listLength)
 			throw new IndexOutOfBoundsException();
 		if (firstIndex < 0)
 			throw new IndexOutOfBoundsException();
@@ -219,44 +319,6 @@ public class Collections {
 		T temp = list.get(firstIndex);
 		list.set(firstIndex, list.get(secondIndex));
 		list.set(secondIndex, temp);
-	}
-
-	/**
-	 * Reasonable as general purpose sorting. Relies on insertion sort for small
-	 * lists. Uses randomized pivots to reduce worse-case scenarios. With
-	 * tuning, runs much faster than mergesort.
-	 * 
-	 * Stability: Equal elements are changed.
-	 * 
-	 * Extra space: O(1)
-	 * 
-	 * Comparisons: O(n^2) but typically O(nlog(n))
-	 * 
-	 * Swaps: O(n^2) but typically O(nlog(n))
-	 * 
-	 * @param list
-	 *            target list with elements
-	 */
-	public static <T extends Comparable<? super T>> void quickSort(List<T> list) {
-		quickSort(list, 0, list.size());
-	}
-
-	private static <T extends Comparable<? super T>> void quickSort(
-			List<T> list, int first, int last) {
-		if (list.size() < 2)
-			return;
-		if (list.size() < QUICK_TO_INSERT_SORT)
-			insertionSort(list);
-		else if (first < last) {
-			int pivot = partition(list, first, last);
-			if (pivot < list.size() / 2) {
-				quickSort(list, first, pivot - 1);
-				quickSort(list, pivot + 1, last);
-			} else {
-				quickSort(list, pivot + 1, last);
-				quickSort(list, first, pivot - 1);
-			}
-		}
 	}
 
 }

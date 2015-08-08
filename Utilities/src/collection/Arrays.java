@@ -27,16 +27,17 @@ public class Arrays {
 	 *            target being found in array
 	 * @return index of element in array, -1 if not found
 	 */
-	public static <T> int binarySearch(T[] array, T element) {
+	public static <T extends Comparable<? super T>> int binarySearch(T[] array,
+			T element) {
 		return binarySearch(array, element, 0, array.length - 1);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> int binarySearch(T[] array, T element, int min, int max) {
+	private static <T extends Comparable<? super T>> int binarySearch(
+			T[] array, T element, int min, int max) {
 		if (array.length < 1 || max < min)
 			return -1;
 		int half = (min + max) / 2;
-		int comparison = (((Comparable<Object>) array[half]).compareTo(element));
+		int comparison = (array[half].compareTo(element));
 
 		return comparison < 0 ? binarySearch(array, element, half + 1, max)
 				: (comparison == 0 ? half : binarySearch(array, element, min,
@@ -58,13 +59,11 @@ public class Arrays {
 	 * @param array
 	 *            subject of insertionSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void insertionSort(T[] array) {
+	public static <T extends Comparable<? super T>> void insertionSort(T[] array) {
 		if (array.length < 2)
 			return;
 		for (int i = 2; i < array.length; i++) {
-			for (int j = i; j > 1
-					&& ((Comparable<Object>) array[j]).compareTo(array[j - 1]) < 0; j--) {
+			for (int j = i; j > 1 && (array[j].compareTo(array[j - 1])) < 0; j--) {
 				swap(array, j, j - 1);
 			}
 		}
@@ -86,16 +85,17 @@ public class Arrays {
 	 * @param array
 	 *            subject of mergeSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void mergeSort(T[] array) {
+	public static <T extends Comparable<? super T>> void mergeSort(T[] array) {
 		if (array.length < 2)
 			return;
 		int half = array.length / 2;
 
 		// suppress safe since only elements of type T will be copied into array
+		@SuppressWarnings("unchecked")
 		T[] firstHalf = (T[]) new Object[half];
 		for (int i = 0; i < half; i++)
 			firstHalf[i] = array[i];
+		@SuppressWarnings("unchecked")
 		T[] secondHalf = (T[]) new Object[array.length - half];
 		for (int i = 0; i < array.length - half; i++)
 			secondHalf[i] = array[i + half];
@@ -104,8 +104,7 @@ public class Arrays {
 		mergeSort(secondHalf);
 		for (int i = 0, j = 0, k = 0; i < array.length; i++)
 			if (j < firstHalf.length && k < secondHalf.length)
-				array[i] = ((Comparable<Object>) firstHalf[j])
-						.compareTo(secondHalf[k]) < 0 ? firstHalf[j++]
+				array[i] = (firstHalf[j]).compareTo(secondHalf[k]) < 0 ? firstHalf[j++]
 						: secondHalf[k++];
 			else if (j < firstHalf.length && k >= secondHalf.length)
 				array[i] = firstHalf[j++];
@@ -129,13 +128,13 @@ public class Arrays {
 	 *            where second part starts
 	 * @return pivot index
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> int partition(T[] array, int first, int last) {
+	private static <T extends Comparable<? super T>> int partition(T[] array,
+			int first, int last) {
 		swap(array, first, last - 1);
 		T pivot = array[new Random().nextInt(last)];
 		int i = first;
 		for (int j = first + 1; j < last; j++)
-			if (((Comparable<Object>) array[j]).compareTo(pivot) <= 0)
+			if ((array[j]).compareTo(pivot) <= 0)
 				swap(array, ++i, j);
 		swap(array, first, i);
 		return i;
@@ -194,15 +193,13 @@ public class Arrays {
 	 * @param array
 	 *            subject of selectionSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void selectionSort(T[] array) {
+	public static <T extends Comparable<? super T>> void selectionSort(T[] array) {
 		if (array.length < 2)
 			return;
 		for (int i = 0; i < array.length; i++) {
 			int min = i;
 			for (int j = i + 1; j < array.length; j++) {
-				min = ((Comparable<Object>) array[j]).compareTo(array[min]) < 0 ? j
-						: min;
+				min = (array[j]).compareTo(array[min]) < 0 ? j : min;
 			}
 			swap(array, i, min);
 		}
@@ -242,11 +239,12 @@ public class Arrays {
 	 * @param array
 	 *            target array with elements
 	 */
-	public static <T> void quickSort(T[] array) {
+	public static <T extends Comparable<? super T>> void quickSort(T[] array) {
 		quickSort(array, 0, array.length);
 	}
 
-	private static <T> void quickSort(T[] array, int first, int last) {
+	private static <T extends Comparable<? super T>> void quickSort(T[] array,
+			int first, int last) {
 		if (array.length < 2)
 			return;
 		if (array.length < QUICK_TO_INSERT_SORT)

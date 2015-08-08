@@ -27,18 +27,17 @@ public class Collections {
 	 *            target being found in list
 	 * @return index of element in list, -1 if not found
 	 */
-	public static <T> int binarySearch(List<T> list, T element) {
+	public static <T extends Comparable<? super T>> int binarySearch(
+			List<T> list, T element) {
 		return binarySearch(list, element, 0, list.size() - 1);
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> int binarySearch(List<T> list, T element, int min,
-			int max) {
+	private static <T extends Comparable<? super T>> int binarySearch(
+			List<T> list, T element, int min, int max) {
 		if (list.size() < 1 || max < min)
 			return -1;
 		int half = (min + max) / 2;
-		int comparison = (((Comparable<Object>) list.get(half))
-				.compareTo(element));
+		int comparison = ((list.get(half)).compareTo(element));
 
 		return comparison < 0 ? binarySearch(list, element, half + 1, max)
 				: (comparison == 0 ? half : binarySearch(list, element, min,
@@ -60,12 +59,11 @@ public class Collections {
 	 * @param list
 	 *            subject of insertionSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void insertionSort(List<T> list) {
+	public static <T extends Comparable<? super T>> void insertionSort(
+			List<T> list) {
 		for (int i = 2; i < list.size(); i++) {
 			for (int j = i; j > 1
-					&& ((Comparable<Object>) list.get(j)).compareTo(list
-							.get(j - 1)) < 0; j--) {
+					&& (list.get(j)).compareTo(list.get(j - 1)) < 0; j--) {
 				swap(list, j, j - 1);
 			}
 		}
@@ -87,8 +85,7 @@ public class Collections {
 	 * @param list
 	 *            subject of mergeSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void mergeSort(List<T> list) {
+	public static <T extends Comparable<? super T>> void mergeSort(List<T> list) {
 		if (list.size() < 2)
 			return;
 		int half = list.size() / 2;
@@ -105,9 +102,10 @@ public class Collections {
 		mergeSort(secondHalf);
 		for (int i = 0, j = 0, k = 0; i < list.size(); i++)
 			if (j < firstHalf.size() && k < secondHalf.size())
-				list.set(i, ((Comparable<Object>) firstHalf.get(j))
-						.compareTo(secondHalf.get(k)) < 0 ? firstHalf.get(j++)
-						: secondHalf.get(k++));
+				list.set(
+						i,
+						(firstHalf.get(j)).compareTo(secondHalf.get(k)) < 0 ? firstHalf
+								.get(j++) : secondHalf.get(k++));
 			else if (j < firstHalf.size() && k >= secondHalf.size())
 				list.set(i, firstHalf.get(j++));
 			else if (k < secondHalf.size() && j >= firstHalf.size())
@@ -130,13 +128,13 @@ public class Collections {
 	 *            where second part starts
 	 * @return pivot index
 	 */
-	@SuppressWarnings("unchecked")
-	private static <T> int partition(List<T> list, int first, int last) {
+	private static <T extends Comparable<? super T>> int partition(
+			List<T> list, int first, int last) {
 		swap(list, first, last - 1);
 		T pivot = list.get(new Random().nextInt(last));
 		int i = first;
 		for (int j = first + 1; j < last; j++)
-			if (((Comparable<Object>) list.get(j)).compareTo(pivot) <= 0)
+			if ((list.get(j)).compareTo(pivot) <= 0)
 				swap(list, ++i, j);
 		swap(list, first, i);
 		return i;
@@ -194,13 +192,12 @@ public class Collections {
 	 * @param list
 	 *            subject of selectionSort
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> void selectionSort(List<T> list) {
+	public static <T extends Comparable<? super T>> void selectionSort(
+			List<T> list) {
 		for (int i = 0; i < list.size(); i++) {
 			int min = i;
 			for (int j = i + 1; j < list.size(); j++) {
-				min = ((Comparable<Object>) list.get(j)).compareTo(list
-						.get(min)) < 0 ? j : min;
+				min = (list.get(j)).compareTo(list.get(min)) < 0 ? j : min;
 			}
 			swap(list, i, min);
 		}
@@ -240,11 +237,12 @@ public class Collections {
 	 * @param list
 	 *            target list with elements
 	 */
-	public static <T> void quickSort(List<T> list) {
+	public static <T extends Comparable<? super T>> void quickSort(List<T> list) {
 		quickSort(list, 0, list.size());
 	}
 
-	private static <T> void quickSort(List<T> list, int first, int last) {
+	private static <T extends Comparable<? super T>> void quickSort(
+			List<T> list, int first, int last) {
 		if (list.size() < 2)
 			return;
 		if (list.size() < QUICK_TO_INSERT_SORT)

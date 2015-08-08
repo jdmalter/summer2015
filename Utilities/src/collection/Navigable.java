@@ -11,7 +11,7 @@ import java.util.Iterator;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public interface Navigable<E> {
+public interface Navigable<E extends Comparable<? super E>> {
 
 	/**
 	 * Returns the least element that is greater than or equal to the given
@@ -38,11 +38,10 @@ public interface Navigable<E> {
 	 * @return negative, zero, or positive integer if the first object is less
 	 *         than, equal to, or greater than the second object
 	 */
-	@SuppressWarnings("unchecked")
-	default int compare(Comparator<? super E> comparator, E e1, E e2) {
-		return comparator == null ? ((e1 == null || e2 == null) ? (e1 == e2 ? 0
-				: (e1 == null) ? -1 : 1) : ((Comparable<Object>) e1)
-				.compareTo(e2)) : comparator.compare(e1, e2);
+	default int compare(Comparator<? super E> comparator, E o1, E o2) {
+		return comparator == null ? ((o1 == null || o2 == null) ? (o1 == o2 ? 0
+				: (o1 == null) ? -1 : 1) : o1.compareTo(o2)) : comparator
+				.compare(o1, o2);
 	}
 
 	/**

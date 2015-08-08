@@ -11,8 +11,8 @@ import java.util.Iterator;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class TreeMultiset<E> extends AbstractMultiset<E> implements
-		Multiset<E>, Navigable<E> {
+public class TreeMultiset<E extends Comparable<? super E>> extends
+		AbstractMultiset<E> implements Multiset<E>, Navigable<E> {
 
 	/**
 	 * Tree in order iterator. Credit to LeetCode for simple idea of using a

@@ -129,8 +129,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@SuppressWarnings("unchecked")
 	public CircularArray() {
-		data = (E[]) DEFAULT_ARRAY; // suppressed warning safe since only
-									// elements of type E will be inserted
+		data = (E[]) DEFAULT_ARRAY;
+		// suppression safe since only elements of type E will be inserted
 	}
 
 	/**
@@ -143,9 +143,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@SuppressWarnings("unchecked")
 	public CircularArray(int initCapacity) {
-		data = (E[]) new Object[initCapacity]; // suppressed warning safe since
-												// only elements of type E will
-												// be inserted
+		data = (E[]) new Object[initCapacity];
+		// suppression safe since only elements of type E will be inserted
 	}
 
 	@Override

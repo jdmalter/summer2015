@@ -24,6 +24,8 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	 */
 	private static class Entry<E> {
 
+		/** How many added objects equal data sorted in this node. */
+		private int count;
 		/** Object stored */
 		private E data;
 		/** Reference to next linked entry */
@@ -38,6 +40,7 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 		 *            reference to next linked entry
 		 */
 		private Entry(E data, Entry<E> next) {
+			this.count = 1;
 			this.data = data;
 			this.next = next;
 		}
@@ -70,10 +73,21 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	public boolean add(E obj) {
 		if (table.length * load < size)
 			rehash();
-
 		int hash = hash(obj);
-		Entry<E> next = table[hash];
-		table[hash] = new Entry<E>(obj, next);
+
+		// Check if node already exists
+		Entry<E> current = table[hash];
+		while (current != null) {
+			if (current.data == null ? obj == null : current.data.equals(obj)) {
+				current.count++;
+				size++;
+				return true;
+			}
+			current = current.next;
+		}
+
+		// Add node at the top
+		table[hash] = new Entry<E>(obj, table[hash]);
 		size++;
 		return true;
 	}
@@ -132,10 +146,12 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 
 				Entry<E> entry = iteratorTable[pointer];
 				E result = entry.data;
-				if (entry.next != null) {
-					iteratorTable[pointer] = entry.next;
-				} else
-					pointer++;
+				iteratorTable[pointer].count--;
+				if (iteratorTable[pointer].count < 1)
+					if (entry.next != null)
+						iteratorTable[pointer] = entry.next;
+					else
+						pointer++;
 				return result;
 			}
 
@@ -154,7 +170,8 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 		// add old elements
 		for (int j = 0; j < table.length; j++) {
 			while (oldTable[j] != null) {
-				add(oldTable[j].data);
+				for (int k = 0; k < oldTable[j].count; k++)
+					add(oldTable[j].data);
 				oldTable[j] = oldTable[j].next;
 			}
 		}
@@ -168,7 +185,10 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 			// Check top bucket
 			if (table[hash].data == null ? obj == null : table[hash].data
 					.equals(obj)) {
-				table[hash] = table[hash].next;
+				table[hash].count--;
+				if (table[hash].count == 0)
+					table[hash] = table[hash].next;
+				size--;
 				return true;
 			}
 
@@ -178,7 +198,10 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 			while (current != null) {
 				if (current.data == null ? obj == null : current.data
 						.equals(obj)) {
-					prev.next = prev.next.next;
+					current.count--;
+					if (current.count == 0)
+						prev.next = prev.next.next;
+					size--;
 					return true;
 				}
 				prev = current;

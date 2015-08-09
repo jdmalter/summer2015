@@ -129,7 +129,7 @@ public interface Collection<E> extends Iterable<E> {
 	boolean retainAll(Collection<?> coll);
 
 	/**
-	 * Returns number of elements (or INTEGER.MAX_VALUE if that is less).
+	 * Returns number of elements.
 	 * 
 	 * @return number of elements
 	 */

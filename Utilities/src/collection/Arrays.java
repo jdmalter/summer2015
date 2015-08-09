@@ -51,6 +51,48 @@ public class Arrays {
 	}
 
 	/**
+	 * Converts a decimal number into any given base greater than one.
+	 * 
+	 * @param value
+	 *            number being converted
+	 * @param base
+	 *            base of number system converted into
+	 * @return array of int with each number being a digit in the new number
+	 */
+	public static int[] decompse(int value, int base) {
+		Stack<Integer> stack = new CircularArray<Integer>();
+		while (value > 0 && base > 1) {
+			stack.push(value % base);
+			value = value / base;
+		}
+		int[] result = new int[stack.size()];
+		int i = 0;
+		while (!stack.isEmpty())
+			result[i++] = stack.pop();
+		return result;
+	}
+
+	/**
+	 * Computes dot product of two arrays of int.
+	 * 
+	 * @param arrayOne
+	 *            target array
+	 * @param arrayTwo
+	 *            target array
+	 * @return dot product
+	 * @throws IllegalArgumentException
+	 *             if parameter array lengths do not match
+	 */
+	public static int dotProduct(int[] arrayOne, int[] arrayTwo) {
+		if (arrayOne.length != arrayTwo.length)
+			throw new IllegalArgumentException("Array lengths must be equal");
+		int result = 0;
+		for (int i = 0; i < arrayOne.length; i++)
+			result += arrayOne[i] * arrayTwo[i];
+		return result;
+	}
+
+	/**
 	 * Sorts an array by swapping elements until an element is less than its
 	 * previous swapped element or at the beginning. Reasonable on smaller (less
 	 * than few dozen) arrays.
@@ -284,9 +326,10 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            target array with elements
+	 * @param <T>
+	 *            type of element
 	 */
-	@SuppressWarnings("unused")
-	private static <T> void reverse(T[] array) {
+	public static <T> void reverse(T[] array) {
 		if (array.length < 2)
 			return;
 		for (int i = 0; i < array.length / 2; i++)

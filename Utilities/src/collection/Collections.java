@@ -51,6 +51,47 @@ public class Collections {
 	}
 
 	/**
+	 * Converts a decimal number into any given base greater than one.
+	 * 
+	 * @param value
+	 *            number being converted
+	 * @param base
+	 *            base of number system converted into
+	 * @return list of Integer with each number being a digit in the new number
+	 */
+	public static List<Integer> decompse(int value, int base) {
+		Stack<Integer> stack = new CircularArray<Integer>();
+		while (value > 0 && base > 1) {
+			stack.push(value % base);
+			value = value / base;
+		}
+		List<Integer> result = new CircularArray<Integer>();
+		while (!stack.isEmpty())
+			result.add(stack.pop());
+		return result;
+	}
+
+	/**
+	 * Computes dot product of two lists of Integer.
+	 * 
+	 * @param listOne
+	 *            target list
+	 * @param listTwo
+	 *            target list
+	 * @return dot product
+	 * @throws IllegalArgumentException
+	 *             if parameter list lengths do not match
+	 */
+	public static int dotProduct(List<Integer> listOne, List<Integer> listTwo) {
+		if (listOne.size() != listTwo.size())
+			throw new IllegalArgumentException("Array lengths must be equal");
+		int result = 0;
+		for (int i = 0; i < listOne.size(); i++)
+			result += listOne.get(i) * listTwo.get(i);
+		return result;
+	}
+
+	/**
 	 * Sorts an list by swapping elements until an element is less than its
 	 * previous swapped element or at the beginning. Reasonable on smaller (less
 	 * than few dozen) lists.
@@ -283,9 +324,10 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            target list with elements
+	 * @param <T>
+	 *            type of element
 	 */
-	@SuppressWarnings("unused")
-	private static <T> void reverse(List<T> list) {
+	public static <T> void reverse(List<T> list) {
 		if (list.size() < 2)
 			return;
 		for (int i = 0; i < list.size() / 2; i++)

@@ -1,8 +1,8 @@
 package collection;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 /**
  * A multiset implemented through hashing.
@@ -47,11 +47,60 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 
 	}
 
+	/**
+	 * Iterator for HashMultiset.
+	 * 
+	 * @author Jacob Malter
+	 *
+	 */
+	private class HashIterator implements Iterator<E> {
+
+		/** Elements in collection */
+		private Entry<E>[] iteratorTable;
+		/** Reference to next element */
+		private int pointer;
+
+		@SuppressWarnings("unchecked")
+		private HashIterator() {
+			// suppression safe since only Entry will be inserted into array
+			iteratorTable = (Entry<E>[]) new Object[table.length];
+			System.arraycopy(table, 0, iteratorTable, 0, table.length);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pointer < size;
+		}
+
+		@Override
+		public E next() {
+			if (!hasNext())
+				throw new NoSuchElementException(
+						"No more elements remaining in iterator");
+
+			Entry<E> entry = iteratorTable[pointer];
+			E result = entry.data;
+			iteratorTable[pointer].count--;
+			if (iteratorTable[pointer].count < 1)
+				if (entry.next != null)
+					iteratorTable[pointer] = entry.next;
+				else
+					pointer++;
+			return result;
+		}
+
+	}
+
 	/** prime number */
-	public static final int DEFAULT_CAPACITY = 23;
+	public static final int[] DEFAULT_CAPACITIES = { 53, 97, 193, 389, 769,
+			1543, 3079, 6151, 12289, 24593, 49157, 98317, 196613, 393241,
+			786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653,
+			100663319, 201326611, 402653189, 805306457, 1610612741 };
 	/** Reasonably high load rehashing */
 	public static final float DEFAULT_LOAD = 0.75f;
 
+	/** Marks how many elements can be stored in array. */
+	private int capacityIndex;
 	/** percentage of capacity filled before rehash occurs */
 	private float load;
 	/** number of entries inserted */
@@ -65,7 +114,7 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	@SuppressWarnings("unchecked")
 	public HashMultiset() {
 		load = DEFAULT_LOAD;
-		table = new Entry[DEFAULT_CAPACITY];
+		table = new Entry[DEFAULT_CAPACITIES[capacityIndex++]];
 		// suppression safe since only elements of type E will be inserted
 	}
 
@@ -112,14 +161,19 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	}
 
 	/**
-	 * Generates unsigned integer position for indexing.
+	 * Generates positive integer position for indexing.
 	 * 
 	 * @param obj
 	 *            hashing subject
 	 * @return index
 	 */
 	private int hash(Object obj) {
-		return obj == null ? 0 : (obj.hashCode() & 0x7FFFFFFF) % table.length;
+		int[] key = collection.Arrays.decompse(
+				obj == null ? 0 : obj.hashCode(), table.length);
+		int[] array = new int[key.length];
+		for (int i = 0; i < array.length; i++)
+			array[i] = new Random(table.length).nextInt(table.length);
+		return Math.abs(Arrays.dotProduct(key, array) % table.length);
 	}
 
 	/**
@@ -127,35 +181,7 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	 */
 	@Override
 	public Iterator<E> iterator() {
-		return new Iterator<E>() {
-
-			private Entry<E>[] iteratorTable = Arrays.copyOf(table,
-					table.length);
-			private int pointer = 0;
-
-			@Override
-			public boolean hasNext() {
-				return pointer < size;
-			}
-
-			@Override
-			public E next() {
-				if (!hasNext())
-					throw new NoSuchElementException(
-							"No more elements remaining in iterator");
-
-				Entry<E> entry = iteratorTable[pointer];
-				E result = entry.data;
-				iteratorTable[pointer].count--;
-				if (iteratorTable[pointer].count < 1)
-					if (entry.next != null)
-						iteratorTable[pointer] = entry.next;
-					else
-						pointer++;
-				return result;
-			}
-
-		};
+		return new HashIterator();
 	}
 
 	/**
@@ -163,8 +189,11 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	private void rehash() {
-		Entry<E>[] oldTable = Arrays.copyOf(table, table.length);
-		table = (Entry<E>[]) new Entry[table.length * 2 + 1];
+		if (capacityIndex + 1 >= DEFAULT_CAPACITIES.length)
+			throw new OutOfMemoryError("No more room to expand array.");
+		Entry<E>[] oldTable = (Entry<E>[]) new Object[table.length];
+		System.arraycopy(table, 0, oldTable, 0, table.length);
+		table = (Entry<E>[]) new Entry[DEFAULT_CAPACITIES[capacityIndex++]];
 		// suppression safe since only elements of type E will be inserted
 
 		// add old elements

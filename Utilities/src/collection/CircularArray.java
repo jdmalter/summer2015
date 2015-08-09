@@ -20,18 +20,29 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 * 
 	 * @author Jacob Malter
 	 */
-	protected class LstIterator implements ListIterator<E> {
+	private class LstIterator implements ListIterator<E> {
 
 		/** Reference to elements in collection */
-		protected E[] elements;
+		private E[] elements;
 		/** Reference to next element, reference to last element returned */
-		protected int pointer, lastReturned;
+		private int pointer, lastReturned;
 
 		/**
 		 * Constructs a new LstIterator.
 		 */
-		protected LstIterator() {
-			this(0);
+		private LstIterator() {
+			this(0, true);
+		}
+
+		/**
+		 * Constructs a new LstIterator given direction.
+		 * 
+		 * @param forward
+		 *            true if iterator elements from 0 to size(), otherwise
+		 *            iterator elements reversed
+		 */
+		private LstIterator(boolean forward) {
+			this(0, forward);
 		}
 
 		/**
@@ -40,7 +51,20 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 		 * @param index
 		 *            starting position within list
 		 */
-		protected LstIterator(int index) {
+		private LstIterator(int index) {
+			this(index, true);
+		}
+
+		/**
+		 * Constructs a new LstIterator given index and direction.
+		 * 
+		 * @param index
+		 *            starting position within list
+		 * @param forward
+		 *            true if iterator elements from 0 to size(), otherwise
+		 *            iterator elements reversed
+		 */
+		private LstIterator(int index, boolean forward) {
 			try {
 				rangeCheck(index);
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -50,6 +74,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 			this.lastReturned = -1;
 			this.pointer = index;
 			this.elements = (E[]) Arrays.copyOf(data, data.length);
+			if (!forward)
+				collection.Arrays.reverse(elements);
 			// suppressed warning safe since data is type E
 		}
 
@@ -166,24 +192,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@Override
 	public Iterator<E> descendingIterator() {
-		return new LstIterator(size()) {
-
-			@Override
-			public boolean hasNext() {
-				return 0 < pointer;
-			}
-
-			@Override
-			public E next() {
-				if (!hasNext())
-					throw new NoSuchElementException(
-							"No more elements remaining in iterator");
-
-				return elements[lastReturned = --pointer];
-			}
-
-		};
-
+		return new LstIterator(false);
 	}
 
 	/**
@@ -200,9 +209,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	@Override
 	public E get(int index) {
 		rangeCheck(index);
-		int newIndex = translate(index);
-		// copy to prevent access within data
-		return Arrays.copyOfRange(data, newIndex, newIndex)[0];
+		return data[translate(index)];
 	}
 
 	@Override
@@ -294,7 +301,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 
 	/**
 	 * Shifts a range clockwise by one before but not including given index.
-	 * Moves the head of the range high in index. Replaces item at given index.
+	 * Moves the head of the range higher in index. Replaces item at given index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 

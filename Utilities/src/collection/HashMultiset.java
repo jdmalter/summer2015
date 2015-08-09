@@ -68,10 +68,10 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	 * 
 	 * Note: capacity subject to grow.
 	 * 
-	 * @param capacity
+	 * @param initCapacity
 	 *            beginning capacity
 	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1} or
+	 *             when {@code initCapacity < 1}
 	 */
 	@SuppressWarnings("unchecked")
 	public HashMultiset(int initCapacity) {
@@ -106,23 +106,11 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	@Override
 	public boolean contains(Object obj) {
 		int hash = hash(obj);
-		Entry<E> prev = table[hash];
-		Entry<E> current = null;
-
-		if (prev != null) {
-			// Check top bucket
-			if (prev.data == null ? obj == null : prev.data.equals(obj))
+		Entry<E> current = table[hash];
+		while (current != null) {
+			if (current.data == null ? obj == null : current.data.equals(obj))
 				return true;
-
-			// check lower buckets
-			current = prev.next;
-			while (current != null) {
-				if (current.data == null ? obj == null : current.data
-						.equals(obj))
-					return true;
-				prev = current;
-				current = current.next;
-			}
+			current = current.next;
 		}
 		return false;
 	}
@@ -178,34 +166,33 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	@SuppressWarnings("unchecked")
 	private void rehash() {
 		Entry<E>[] oldTable = Arrays.copyOf(table, table.length);
-		table = new Entry[table.length * 2 + 1];
+		table = (Entry<E>[]) new Entry[table.length * 2 + 1];
 		// suppression safe since only elements of type E will be inserted
 
 		// add old elements
 		for (int j = 0; j < table.length; j++) {
-			if (oldTable[j] != null)
-				do {
-					add(oldTable[j].data);
-					oldTable[j] = oldTable[j].next;
-				} while (oldTable[j].next != null);
+			while (oldTable[j] != null) {
+				add(oldTable[j].data);
+				oldTable[j] = oldTable[j].next;
+			}
 		}
 	}
 
 	@Override
 	public boolean remove(Object obj) {
 		int hash = hash(obj);
-		Entry<E> prev = table[hash];
-		Entry<E> current = null;
 
-		if (prev != null) {
+		if (table[hash] != null) {
 			// Check top bucket
-			if (prev.data == null ? obj == null : prev.data.equals(obj)) {
-				prev = prev.next;
+			if (table[hash].data == null ? obj == null : table[hash].data
+					.equals(obj)) {
+				table[hash] = table[hash].next;
 				return true;
 			}
 
 			// Check lower buckets
-			current = prev.next;
+			Entry<E> prev = table[hash];
+			Entry<E> current = table[hash].next;
 			while (current != null) {
 				if (current.data == null ? obj == null : current.data
 						.equals(obj)) {

@@ -23,7 +23,7 @@ public class HashSet<E> extends HashMultiset<E> implements Set<E> {
 	 * 
 	 * Note: capacity subject to grow.
 	 * 
-	 * @param capacity
+	 * @param initCapacity
 	 *            beginning capacity
 	 * @throws IllegalArgumentException
 	 *             when {@code initCapacity < 1} or

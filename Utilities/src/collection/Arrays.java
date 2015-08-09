@@ -10,6 +10,10 @@ import java.util.Random;
  */
 public class Arrays {
 
+	/** Default size for starting array in collections back by an array */
+	public static final int DEFAULT_CAPACITY = 16;
+	/** Empty array used to initially back array based collections */
+	public static final Object[] DEFAULT_ARRAY = new Object[DEFAULT_CAPACITY];
 	private static final int QUICK_TO_INSERT_SORT = 24;
 
 	private Arrays() {
@@ -25,6 +29,8 @@ public class Arrays {
 	 *            containing elements
 	 * @param element
 	 *            target being found in array
+	 * @param <T>
+	 *            type of element
 	 * @return index of element in array, -1 if not found
 	 */
 	public static <T extends Comparable<? super T>> int binarySearch(T[] array,
@@ -58,6 +64,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            subject of insertionSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void insertionSort(T[] array) {
 		if (array.length < 2)
@@ -76,6 +84,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            contains elements
+	 * @param <T>
+	 *            type of element
 	 * @return greatest element
 	 */
 	public static <T extends Comparable<? super T>> T maximum(T[] array) {
@@ -103,6 +113,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            subject of mergeSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void mergeSort(T[] array) {
 		if (array.length < 2)
@@ -138,6 +150,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            contains elements
+	 * @param <T>
+	 *            type of element
 	 * @return least element
 	 */
 	public static <T extends Comparable<? super T>> T minimum(T[] array) {
@@ -164,6 +178,8 @@ public class Arrays {
 	 *            where second part starts
 	 * @param pivot
 	 *            element used to divide other elements
+	 * @param <T>
+	 *            type of element
 	 * @return pivot index
 	 */
 	private static <T extends Comparable<? super T>> int partition(T[] array,
@@ -191,6 +207,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            target array with elements
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void quickSort(T[] array) {
 		quickSort(array, 0, array.length);
@@ -228,6 +246,8 @@ public class Arrays {
 	 *            where first part starts
 	 * @param last
 	 *            where second part starts
+	 * @param <T>
+	 *            type of element
 	 * @return pivot index
 	 */
 	private static <T extends Comparable<? super T>> int randomPartition(
@@ -288,6 +308,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            subject of selectionSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void selectionSort(T[] array) {
 		if (array.length < 2)
@@ -307,16 +329,18 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            target array with elements
-	 * @param indexFirst
+	 * @param firstIndex
 	 *            position of first element
-	 * @param indexSecond
+	 * @param secondIndex
 	 *            position of second element
+	 * @param <T>
+	 *            type of element
 	 */
-	public static <T> void swap(T[] array, int firstIndex, int lastIndex) {
-		rangeCheck(array.length, firstIndex, lastIndex);
+	public static <T> void swap(T[] array, int firstIndex, int secondIndex) {
+		rangeCheck(array.length, firstIndex, secondIndex);
 		T temp = array[firstIndex];
-		array[firstIndex] = array[lastIndex];
-		array[lastIndex] = temp;
+		array[firstIndex] = array[secondIndex];
+		array[secondIndex] = temp;
 	}
 
 }

@@ -31,9 +31,11 @@ public interface Navigable<E extends Comparable<? super E>> {
 	 * {@code Comparable<Object>}) are directly compared. ClassCastException may
 	 * be thrown when using direct comparison of two non-null objects.
 	 * 
-	 * @param e1
+	 * @param comparator
+	 *            used to impose ordering
+	 * @param o1
 	 *            first object
-	 * @param e2
+	 * @param o2
 	 *            second object
 	 * @return negative, zero, or positive integer if the first object is less
 	 *         than, equal to, or greater than the second object

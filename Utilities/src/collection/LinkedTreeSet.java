@@ -17,8 +17,6 @@ import java.util.Iterator;
  */
 public class LinkedTreeSet<E extends Comparable<? super E>> extends TreeSet<E> {
 
-	public static final Collection<Object> linkedCollection = new LinkedList<Object>();
-
 	/** Maintains in-order entries */
 	private Collection<E> linkedEntries;
 
@@ -35,8 +33,10 @@ public class LinkedTreeSet<E extends Comparable<? super E>> extends TreeSet<E> {
 	 * @param comparator
 	 *            ordering being used
 	 */
+	@SuppressWarnings("unchecked")
 	public LinkedTreeSet(Comparator<? super E> comparator) {
 		super(comparator);
+		linkedEntries = (Collection<E>) Collections.ITERABLE_AND_REMOVE_COLLECTION;
 	}
 
 	@Override

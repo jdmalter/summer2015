@@ -28,10 +28,10 @@ public class LinkedHashSet<E> extends HashSet<E> {
 	 * 
 	 * Note: capacity subject to grow.
 	 * 
-	 * @param capacity
+	 * @param initCapacity
 	 *            beginning capacity
 	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1} or
+	 *             when {@code initCapacity < 1}
 	 */
 	@SuppressWarnings("unchecked")
 	public LinkedHashSet(int initCapacity) {

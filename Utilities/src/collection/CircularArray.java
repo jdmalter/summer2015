@@ -22,13 +22,24 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	protected class LstIterator implements ListIterator<E> {
 
+		/** Reference to elements in collection */
 		protected E[] elements;
+		/** Reference to next element, reference to last element returned */
 		protected int pointer, lastReturned;
 
+		/**
+		 * Constructs a new LstIterator.
+		 */
 		protected LstIterator() {
 			this(0);
 		}
 
+		/**
+		 * Constructs a new LstIterator given index.
+		 * 
+		 * @param index
+		 *            starting position within list
+		 */
 		protected LstIterator(int index) {
 			try {
 				rangeCheck(index);
@@ -114,9 +125,6 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 
 	}
 
-	public static final int DEFAULT_CAPACITY = 16;
-	public static final Object[] DEFAULT_ARRAY = new Object[DEFAULT_CAPACITY];
-
 	/** memory for data */
 	private E[] data;
 	/**
@@ -129,7 +137,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	@SuppressWarnings("unchecked")
 	public CircularArray() {
-		data = (E[]) DEFAULT_ARRAY;
+		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
 		// suppression safe since only elements of type E will be inserted
 	}
 
@@ -162,8 +170,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
-		data = (E[]) DEFAULT_ARRAY; // suppressed warning safe since only
-									// elements of type E will be inserted
+		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
+		// suppression safe since only elements of type E will be inserted
 		head = size = tail = 0;
 	}
 

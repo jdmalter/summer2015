@@ -22,13 +22,24 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	protected class LstIterator implements ListIterator<E> {
 
+		/** Reference to current node, reference to last returned node */
 		protected Node<E> pointer, lastReturned;
+		/** Location of pointer in list */
 		protected int pointerIndex;
 
+		/**
+		 * Constructs a new LstIterator.
+		 */
 		protected LstIterator() {
 			this(0);
 		}
 
+		/**
+		 * Constructs a new LstIterator given index.
+		 * 
+		 * @param index
+		 *            starting position within list
+		 */
 		protected LstIterator(int index) {
 			try {
 				rangeCheck(index);
@@ -38,8 +49,8 @@ public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
 
 			pointer = head;
 			for (int i = 0; i < index; i++) {
-				pointer = pointer.next;
-				pointerIndex++;
+				next();
+				lastReturned = null;
 			}
 		}
 

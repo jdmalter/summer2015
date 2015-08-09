@@ -10,7 +10,9 @@ import java.util.Random;
  */
 public class Collections {
 
+	/** Empty collection for general use. */
 	public static final Collection<?> EMPTY_COLLECTION = new CircularArray<Object>();
+	/** Empty collection used for fast iteration and remove operations. */
 	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArray<Object>();
 	private static final int QUICK_TO_INSERT_SORT = 24;
 
@@ -27,6 +29,8 @@ public class Collections {
 	 *            containing elements
 	 * @param element
 	 *            target being found in list
+	 * @param <T>
+	 *            type of element
 	 * @return index of element in list, -1 if not found
 	 */
 	public static <T extends Comparable<? super T>> int binarySearch(
@@ -60,6 +64,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            subject of insertionSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void insertionSort(
 			List<T> list) {
@@ -78,6 +84,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            contains elements
+	 * @param <T>
+	 *            type of element
 	 * @return greatest element
 	 */
 	public static <T extends Comparable<? super T>> T maximum(List<T> list) {
@@ -106,6 +114,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            subject of mergeSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void mergeSort(List<T> list) {
 		if (list.size() < 2)
@@ -141,6 +151,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            contains elements
+	 * @param <T>
+	 *            type of element
 	 * @return least element
 	 */
 	public static <T extends Comparable<? super T>> T minimum(List<T> list) {
@@ -197,6 +209,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            target list with elements
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void quickSort(List<T> list) {
 		quickSort(list, 0, list.size());
@@ -293,6 +307,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            subject of selectionSort
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T extends Comparable<? super T>> void selectionSort(
 			List<T> list) {
@@ -311,10 +327,12 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            target list with elements
-	 * @param indexFirst
+	 * @param firstIndex
 	 *            position of first element
-	 * @param indexSecond
+	 * @param secondIndex
 	 *            position of second element
+	 * @param <T>
+	 *            type of element
 	 */
 	public static <T> void swap(List<T> list, int firstIndex, int secondIndex) {
 		rangeCheck(list.size(), firstIndex, secondIndex);

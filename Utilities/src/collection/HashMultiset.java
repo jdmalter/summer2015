@@ -45,7 +45,7 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	}
 
 	/** prime number */
-	public static final int DEFAULT_CAPACITY = 17;
+	public static final int DEFAULT_CAPACITY = 23;
 	/** Reasonably high load rehashing */
 	public static final float DEFAULT_LOAD = 0.75f;
 
@@ -59,28 +59,10 @@ public class HashMultiset<E> extends AbstractMultiset<E> {
 	/**
 	 * Constructs HashBag with default capacity and default load.
 	 */
-	public HashMultiset() {
-		this(DEFAULT_CAPACITY);
-	}
-
-	/**
-	 * Constructs HashBag with parameter capacity and parameter load.
-	 * 
-	 * Note: capacity subject to grow.
-	 * 
-	 * @param initCapacity
-	 *            beginning capacity
-	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1}
-	 */
 	@SuppressWarnings("unchecked")
-	public HashMultiset(int initCapacity) {
-		if (initCapacity < 1)
-			throw new IllegalArgumentException("capacity (" + initCapacity
-					+ ") cannot be less than one");
-
+	public HashMultiset() {
 		load = DEFAULT_LOAD;
-		table = new Entry[initCapacity];
+		table = new Entry[DEFAULT_CAPACITY];
 		// suppression safe since only elements of type E will be inserted
 	}
 

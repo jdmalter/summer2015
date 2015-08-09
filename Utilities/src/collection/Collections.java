@@ -123,10 +123,10 @@ public class Collections {
 		int half = list.size() / 2;
 
 		// suppress safe since only elements of type T will be copied into list
-		List<T> firstHalf = new CircularArray<T>(half);
+		List<T> firstHalf = new CircularArray<T>();
 		for (int i = 0; i < half; i++)
 			firstHalf.set(i, list.get(i));
-		List<T> secondHalf = new CircularArray<T>(list.size() - half);
+		List<T> secondHalf = new CircularArray<T>();
 		for (int i = half; i < list.size(); i++)
 			secondHalf.set(i, list.get(i));
 

@@ -19,23 +19,9 @@ public class LinkedHashSet<E> extends HashSet<E> {
 	/**
 	 * Constructs LinkedHashSet with default capacity and default load.
 	 */
-	public LinkedHashSet() {
-		this(DEFAULT_CAPACITY);
-	}
-
-	/**
-	 * Constructs LinkedHashSet with parameter capacity and parameter load.
-	 * 
-	 * Note: capacity subject to grow.
-	 * 
-	 * @param initCapacity
-	 *            beginning capacity
-	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1}
-	 */
 	@SuppressWarnings("unchecked")
-	public LinkedHashSet(int initCapacity) {
-		super(initCapacity);
+	public LinkedHashSet() {
+		super();
 		linkedEntries = (Collection<E>) Collections.ITERABLE_AND_REMOVE_COLLECTION;
 		// suppression safe since only elements of type E will be inserted
 	}

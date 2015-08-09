@@ -1,8 +1,8 @@
 package collection;
 
 /**
- * A set extended from HashMultiset. Add method is refined to not accept duplicates
- * which brakes complete substitutability.
+ * A set extended from HashMultiset. Add method is refined to not accept
+ * duplicates which brakes complete substitutability.
  * 
  * @author Jacob Malter
  *
@@ -15,21 +15,7 @@ public class HashSet<E> extends HashMultiset<E> implements Set<E> {
 	 * Constructs HashSet with default capacity and default load.
 	 */
 	public HashSet() {
-		this(DEFAULT_CAPACITY);
-	}
-
-	/**
-	 * Constructs HashSet with parameter capacity and parameter load.
-	 * 
-	 * Note: capacity subject to grow.
-	 * 
-	 * @param initCapacity
-	 *            beginning capacity
-	 * @throws IllegalArgumentException
-	 *             when {@code initCapacity < 1} or
-	 */
-	public HashSet(int initCapacity) {
-		super(initCapacity);
+		super();
 	}
 
 	@Override

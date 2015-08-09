@@ -141,20 +141,6 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 		// suppression safe since only elements of type E will be inserted
 	}
 
-	/**
-	 * Constructs a circular array given capacity.
-	 * 
-	 * Note: capacity subject to grow
-	 * 
-	 * @param initCapacity
-	 *            beginning capacity
-	 */
-	@SuppressWarnings("unchecked")
-	public CircularArray(int initCapacity) {
-		data = (E[]) new Object[initCapacity];
-		// suppression safe since only elements of type E will be inserted
-	}
-
 	@Override
 	public void add(int index, E obj) {
 		rangeCheck(index);

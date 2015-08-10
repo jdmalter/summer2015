@@ -1,5 +1,7 @@
 package collection;
 
+import java.util.NoSuchElementException;
+
 /**
  * A skeletal implementation of the deque interface.
  * 
@@ -8,7 +10,7 @@ package collection;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public abstract class AbstractDeque<E> extends AbstractCollection<E> implements
+public abstract class AbstractDeque<E> extends AbstractQueue<E> implements
 		Deque<E> {
 
 	@Override
@@ -19,13 +21,9 @@ public abstract class AbstractDeque<E> extends AbstractCollection<E> implements
 
 	@Override
 	public E element() {
-		return isEmpty() ? null : getFirst();
-	}
-
-	@Override
-	public boolean offer(E obj) {
-		addLast(obj);
-		return true;
+		if (isEmpty())
+			throw new NoSuchElementException();
+		return getFirst();
 	}
 
 	@Override
@@ -41,11 +39,6 @@ public abstract class AbstractDeque<E> extends AbstractCollection<E> implements
 	}
 
 	@Override
-	public E peek() {
-		return peekFirst();
-	}
-
-	@Override
 	public E peekFirst() {
 		return isEmpty() ? null : getFirst();
 	}
@@ -53,11 +46,6 @@ public abstract class AbstractDeque<E> extends AbstractCollection<E> implements
 	@Override
 	public E peekLast() {
 		return isEmpty() ? null : getLast();
-	}
-
-	@Override
-	public E poll() {
-		return pollFirst();
 	}
 
 	@Override

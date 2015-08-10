@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Heap based priority queue.
+ * Heap based priority queue implemented by tree.
  * 
  * @author Jacob Malter
  *
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class PriorityQueue<E extends Comparable<? super E>> extends
+public class TreePriorityQueue<E extends Comparable<? super E>> extends
 		AbstractQueue<E> implements Navigable<E> {
 
 	/**
@@ -47,7 +47,7 @@ public class PriorityQueue<E extends Comparable<? super E>> extends
 	/**
 	 * Constructs an empty PriorityQueue using natural ordering comparator.
 	 */
-	public PriorityQueue() {
+	public TreePriorityQueue() {
 		this(null);
 	}
 
@@ -57,7 +57,7 @@ public class PriorityQueue<E extends Comparable<? super E>> extends
 	 * @param comparator
 	 *            ordering being used
 	 */
-	public PriorityQueue(Comparator<? super E> comparator) {
+	public TreePriorityQueue(Comparator<? super E> comparator) {
 		this.comparator = comparator;
 	}
 

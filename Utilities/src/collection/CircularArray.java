@@ -170,7 +170,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	@Override
 	public void add(int index, E obj) {
 		rangeCheck(index);
-		ensureCapacity(size());
+		ensureCapacity(size() + 1);
 
 		int newIndex = translate(index);
 		if (newIndex < tail)
@@ -280,7 +280,7 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	 */
 	private void rotateRangeAfterIndex(int fromIndex) {
 		rangeCheck(fromIndex);
-		ensureCapacity(size());
+		ensureCapacity(size() + 1);
 
 		if (tail >= fromIndex && tail != data.length - 1) {
 			for (int i = tail; i >= fromIndex; i--)
@@ -301,7 +301,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 
 	/**
 	 * Shifts a range clockwise by one before but not including given index.
-	 * Moves the head of the range higher in index. Replaces item at given index.
+	 * Moves the head of the range higher in index. Replaces item at given
+	 * index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 

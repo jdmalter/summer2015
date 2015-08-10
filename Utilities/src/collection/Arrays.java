@@ -51,6 +51,19 @@ public class Arrays {
 	}
 
 	/**
+	 * Converts an array into a maxheap.
+	 * 
+	 * @param array
+	 *            converted subject
+	 * @param <T>
+	 *            type of element
+	 */
+	public static <T extends Comparable<? super T>> void buildMaxHeap(T[] array) {
+		for (int i = (array.length - 2) / 2; i > -1; i--)
+			maxHeapify(array, i);
+	}
+
+	/**
 	 * Converts a decimal number into any given base greater than one.
 	 * 
 	 * @param value
@@ -93,9 +106,31 @@ public class Arrays {
 	}
 
 	/**
+	 * Sorts an array by heapifying it. Least elements are last.
+	 * 
+	 * Stability: Equal elements are changed.
+	 * 
+	 * Extra Space: O(n) * this implementation is o(n)...thanks Java!! *
+	 * 
+	 * Comparisons and Swaps: O(nlog(n))
+	 * 
+	 * @param array
+	 *            subject of heapSort
+	 * @param <T>
+	 *            type of element
+	 */
+	public static <T extends Comparable<? super T>> void heapSort(T[] array) {
+		ArrayPriorityQueue<T> heap = new ArrayPriorityQueue<T>();
+		for (int i = 0; i < array.length; i++)
+			heap.add(array[i]);
+		for (int i = 0; i < array.length; i++)
+			array[i] = heap.remove();
+	}
+
+	/**
 	 * Sorts an array by swapping elements until an element is less than its
 	 * previous swapped element or at the beginning. Reasonable on smaller (less
-	 * than few dozen) arrays.
+	 * than few dozen) arrays. Least elements are first.
 	 * 
 	 * Stability: Equal elements are not changed.
 	 * 
@@ -116,6 +151,32 @@ public class Arrays {
 			for (int j = i; j > 1 && (array[j].compareTo(array[j - 1])) < 0; j--) {
 				swap(array, j, j - 1);
 			}
+		}
+	}
+
+	/**
+	 * Rearranges array elements into a max-heap.
+	 * 
+	 * PRECONDTION: subtrees already are max-heaps
+	 * 
+	 * @param array
+	 *            subject of maxHeapify
+	 * @param index
+	 *            position below which elements are sorted
+	 */
+	private static <T extends Comparable<? super T>> void maxHeapify(T[] array,
+			int index) {
+		if (index < 0)
+			throw new IndexOutOfBoundsException("Index less than zero.");
+		int size = array.length;
+		if (2 * index + 1 < size
+				&& array[index].compareTo(array[2 * index + 1]) < 0) {
+			Arrays.swap(array, index, 2 * index + 1);
+			maxHeapify(array, 2 * index + 1);
+		} else if (2 * index + 2 < size
+				&& array[index].compareTo(array[2 * index + 2]) < 0) {
+			Arrays.swap(array, index, 2 * index + 2);
+			maxHeapify(array, 2 * index + 2);
 		}
 	}
 
@@ -143,7 +204,7 @@ public class Arrays {
 	/**
 	 * Recursively sorts an array by merging sorted halves. Its main advantages
 	 * are stability and predictable performance on large arrays. Reasonable on
-	 * larger arrays (greater than few dozen).
+	 * larger arrays (greater than few dozen). Least elements are first.
 	 * 
 	 * Stability: Equal elements are not changed.
 	 * 
@@ -210,7 +271,7 @@ public class Arrays {
 	 * Cuts an array into two parts. Elements at the front less than the pivot
 	 * and elements at the end greater than the pivot. Ideally, each part is
 	 * 50/50 split. 10/90 split is bounded by O(nlog(n)). Worst case, the pivot
-	 * is at the end.
+	 * is at the end. Least elements are first.
 	 * 
 	 * @param array
 	 *            target array being partitioned
@@ -237,7 +298,7 @@ public class Arrays {
 	/**
 	 * Reasonable as general purpose sorting. Relies on insertion sort for small
 	 * lists. Uses randomized pivots to reduce worse-case scenarios. With
-	 * tuning, runs much faster than mergesort.
+	 * tuning, runs much faster than mergesort. Least elements are first.
 	 * 
 	 * Stability: Equal elements are changed.
 	 * 
@@ -339,7 +400,7 @@ public class Arrays {
 	/**
 	 * Generally slower than any other sort algorithm. Its main advantage is
 	 * guaranteed O(n) swaps. If swaps are expensive, selection sort is ideal.
-	 * Reasonable on small arrays.
+	 * Reasonable on small arrays. Least elements are first.
 	 * 
 	 * Stability: Equal elements are changed.
 	 * 

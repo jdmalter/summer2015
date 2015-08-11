@@ -105,29 +105,19 @@ public abstract class AbstractDequeList<E> extends AbstractDeque<E> implements
 	@Override
 	public List<E> subList(int start, boolean startInclusive, int end,
 			boolean endInclusive) {
+		return startInclusive ? (endInclusive ? subList(start, end) : subList(
+				start, end - 1)) : (endInclusive ? subList(start + 1, end)
+				: subList(start + 1, end - 1));
+	}
+
+	private List<E> subList(int start, int end) {
 		if (start > end)
 			throw new IllegalArgumentException("Start must be before end");
 		List<E> result = new LinkedList<E>();
 		Iterator<E> it;
-
-		if (!startInclusive && !endInclusive) {
-			it = listIterator(start + 1);
-			for (int i = start + 1; i < end; i++)
-				result.add(it.next());
-		} else if (!startInclusive && endInclusive) {
-			it = listIterator(start + 1);
-			for (int i = start + 1; i <= end; i++)
-				result.add(it.next());
-		} else if (startInclusive && !endInclusive) {
-			it = listIterator(start);
-			for (int i = start; i < end; i++)
-				result.add(it.next());
-		} else if (startInclusive && endInclusive) {
-			it = listIterator(start);
-			for (int i = start; i <= end; i++)
-				result.add(it.next());
-		}
-
+		it = listIterator(start);
+		for (int i = start; i <= end; i++)
+			result.add(it.next());
 		return result;
 	}
 

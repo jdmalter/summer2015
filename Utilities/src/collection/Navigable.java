@@ -24,6 +24,13 @@ public interface Navigable<E extends Comparable<? super E>> {
 	E ceiling(E e);
 
 	/**
+	 * Returns comparator used for ordering.
+	 * 
+	 * @return comparator used for ordering
+	 */
+	Comparator<? super E> comparator();
+
+	/**
 	 * Compares two objects for ordering.
 	 * 
 	 * This implementation defaults null values to be less than non-null values.

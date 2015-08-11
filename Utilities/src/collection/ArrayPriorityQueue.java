@@ -125,11 +125,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 	@Override
 	public E ceiling(E e) {
 		E result = heap[0];
-		if (e.compareTo(result) < 0)
+		if (compare(comparator(), e, result) < 0)
 			return null;
 		for (int i = 1; i < size(); i++) {
-			int heapComparison = heap[i].compareTo(e);
-			int resultComparsion = result.compareTo(e);
+			int heapComparison = compare(comparator(), heap[i], e);
+			int resultComparsion = compare(comparator(), result, e);
 			result = (heapComparison >= 0)
 					&& (heapComparison < resultComparsion) ? heap[i] : result;
 		}
@@ -163,11 +163,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 	@Override
 	public E floor(E e) {
 		E result = heap[size()];
-		if (e.compareTo(result) > 0)
+		if (compare(comparator(), e, result) > 0)
 			return null;
 		for (int i = size() - 1; i > -1; i--) {
-			int heapComparison = heap[i].compareTo(e);
-			int resultComparsion = result.compareTo(e);
+			int heapComparison = compare(comparator(), heap[i], e);
+			int resultComparsion = compare(comparator(), result, e);
 			result = (heapComparison <= 0)
 					&& (heapComparison > resultComparsion) ? heap[i] : result;
 		}
@@ -177,11 +177,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 	@Override
 	public E higher(E e) {
 		E result = heap[0];
-		if (e.compareTo(result) < 0)
+		if (compare(comparator(), e, result) < 0)
 			return null;
 		for (int i = 1; i < size(); i++) {
-			int heapComparison = heap[i].compareTo(e);
-			int resultComparsion = result.compareTo(e);
+			int heapComparison = compare(comparator(), heap[i], e);
+			int resultComparsion = compare(comparator(), result, e);
 			result = (heapComparison > 0)
 					&& (heapComparison < resultComparsion) ? heap[i] : result;
 		}
@@ -196,11 +196,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 	@Override
 	public E lower(E e) {
 		E result = heap[size()];
-		if (e.compareTo(result) > 0)
+		if (compare(comparator(), e, result) > 0)
 			return null;
 		for (int i = size() - 1; i > -1; i--) {
-			int heapComparison = heap[i].compareTo(e);
-			int resultComparsion = result.compareTo(e);
+			int heapComparison = compare(comparator(), heap[i], e);
+			int resultComparsion = compare(comparator(), result, e);
 			result = (heapComparison < 0)
 					&& (heapComparison > resultComparsion) ? heap[i] : result;
 		}
@@ -223,11 +223,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 		else if (index >= heap.length)
 			throw new IndexOutOfBoundsException("Index greater than capacity.");
 		if (2 * index + 1 < size()
-				&& array[index].compareTo(array[2 * index + 1]) < 0) {
+				&& compare(comparator(), array[index], array[2 * index + 1]) < 0) {
 			Arrays.swap(array, index, 2 * index + 1);
 			maxHeapify(array, 2 * index + 1);
 		} else if (2 * index + 2 < size()
-				&& array[index].compareTo(array[2 * index + 2]) < 0) {
+				&& compare(comparator(), array[index], array[2 * index + 2]) < 0) {
 			Arrays.swap(array, index, 2 * index + 2);
 			maxHeapify(array, 2 * index + 2);
 		}
@@ -243,7 +243,8 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 		int index = heap.length / 2;
 		E min = heap[index++];
 		for (int i = index; i < heap.length; i++)
-			min = heap[index].compareTo(min) < 0 ? heap[index] : min;
+			min = compare(comparator(), heap[index], min) < 0 ? heap[index]
+					: min;
 		return min;
 	}
 
@@ -263,7 +264,7 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 			throw new IndexOutOfBoundsException("Index less than zero.");
 		else if (index >= heap.length)
 			throw new IndexOutOfBoundsException("Index greater than capacity.");
-		if (heap[index].compareTo(heap[(index - 1) / 2]) > 0) {
+		if (compare(comparator(), heap[index], heap[(index - 1) / 2]) > 0) {
 			Arrays.swap(heap, index, (index - 1) / 2);
 			siftUp((index - 1) / 2);
 		}

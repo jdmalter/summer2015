@@ -122,8 +122,8 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	 * @param comparator
 	 *            ordering being used
 	 */
-	public TreeMultiset(Comparator<? super E> comparator) {
-		this.comparator = comparator;
+	public TreeMultiset(Comparator<? super E> comp) {
+		comparator = comp;
 	}
 
 	@Override
@@ -735,9 +735,41 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		vertex.parent = temp;
 	}
 
+	/**
+	 * Returns element comparatively ranked at index.
+	 * 
+	 * @param index
+	 *            position of element compared to other elements
+	 * @return data ranked at index
+	 */
+	public E select(int index) {
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException(
+					"Index must point inclusively between 0 and one less than size.");
+		Node<E> result = select(root, index);
+		return result != null ? result.data : null;
+	}
+
+	private Node<E> select(Node<E> node, int index) {
+		int k = subtreeSize(node.left) + 1;
+		if (index == k)
+			return node;
+		else if (index < k)
+			return select(node.left, index);
+		else if (index > k)
+			return select(node.right, index);
+		return null;
+	}
+
 	@Override
 	public int size() {
 		return size;
+	}
+
+	private int subtreeSize(Node<E> node) {
+		if (node == null)
+			return 0;
+		return subtreeSize(node.left) + subtreeSize(node.right) + 1;
 	}
 
 }

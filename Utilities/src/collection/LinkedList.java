@@ -12,8 +12,7 @@ import java.util.NoSuchElementException;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class LinkedList<E> extends AbstractDequeList<E> implements List<E>,
-		Deque<E> {
+public class LinkedList<E> extends AbstractDequeList<E> {
 
 	/**
 	 * List iterator.

@@ -107,7 +107,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 				throw new NoSuchElementException(
 						"No more elements remaining in iterator");
 
-			return elements[lastReturned = pointer++];
+			lastReturned = pointer;
+			return elements[pointer++];
 		}
 
 		@Override
@@ -121,7 +122,8 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 				throw new NoSuchElementException(
 						"No more elements remaining in iterator");
 
-			return elements[lastReturned = --pointer];
+			lastReturned = --pointer;
+			return elements[pointer];
 		}
 
 		@Override
@@ -184,7 +186,9 @@ public class CircularArray<E> extends AbstractDequeList<E> implements List<E>,
 	public void clear() {
 		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
 		// suppression safe since only elements of type E will be inserted
-		head = size = tail = 0;
+		head = 0;
+		size = 0;
+		tail = 0;
 	}
 
 	/**

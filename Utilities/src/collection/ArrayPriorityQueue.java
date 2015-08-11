@@ -2,6 +2,7 @@ package collection;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Heap based priority queue implemented by array.
@@ -13,6 +14,47 @@ import java.util.Iterator;
  */
 public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 		AbstractQueue<E> implements Navigable<E> {
+
+	/**
+	 * Iterator for array.
+	 * 
+	 * @author Jacob Malter
+	 *
+	 * @param <E>
+	 *            The type of the elements stored in this collection.
+	 */
+	private class HeapIterator implements Iterator<E> {
+
+		private boolean direction;
+		private int pointer;
+		private E[] sortedArray;
+
+		private HeapIterator() {
+			this(true);
+		}
+
+		private HeapIterator(boolean forward) {
+			direction = forward;
+			pointer = direction ? 0 : heap.length - 1;
+			sortedArray = heap;
+			Arrays.heapSort(heap);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return direction ? pointer < sortedArray.length : pointer > -1;
+		}
+
+		@Override
+		public E next() {
+			if (!hasNext())
+				throw new NoSuchElementException();
+			E result = heap[pointer];
+			pointer = direction ? pointer + 1 : pointer - 1;
+			return result;
+		}
+
+	}
 
 	/** Used to compare elements */
 	private final Comparator<? super E> comparator;
@@ -43,6 +85,8 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 
 	@Override
 	public boolean add(E obj) {
+		if (obj == null)
+			throw new IllegalArgumentException("Cannot add null object.");
 		ensureCapacity(size() + 1);
 		heap[size] = obj;
 		siftUp(size++);
@@ -57,7 +101,7 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 	 */
 	@SuppressWarnings("unused")
 	private void buildMaxHeap(E[] array) {
-		for (int i = (array.length - 2) / 2; i > -1; i--)
+		for (int i = (size() - 2) / 2; i > -1; i--)
 			maxHeapify(array, i);
 	}
 
@@ -80,14 +124,21 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 
 	@Override
 	public E ceiling(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		E result = heap[0];
+		if (e.compareTo(result) < 0)
+			return null;
+		for (int i = 1; i < size(); i++) {
+			int heapComparison = heap[i].compareTo(e);
+			int resultComparsion = result.compareTo(e);
+			result = (heapComparison >= 0)
+					&& (heapComparison < resultComparsion) ? heap[i] : result;
+		}
+		return result;
 	}
 
 	@Override
 	public Iterator<E> descendingIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new HeapIterator(false);
 	}
 
 	/**
@@ -111,26 +162,49 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 
 	@Override
 	public E floor(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		E result = heap[size()];
+		if (e.compareTo(result) > 0)
+			return null;
+		for (int i = size() - 1; i > -1; i--) {
+			int heapComparison = heap[i].compareTo(e);
+			int resultComparsion = result.compareTo(e);
+			result = (heapComparison <= 0)
+					&& (heapComparison > resultComparsion) ? heap[i] : result;
+		}
+		return result;
 	}
 
 	@Override
 	public E higher(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		E result = heap[0];
+		if (e.compareTo(result) < 0)
+			return null;
+		for (int i = 1; i < size(); i++) {
+			int heapComparison = heap[i].compareTo(e);
+			int resultComparsion = result.compareTo(e);
+			result = (heapComparison > 0)
+					&& (heapComparison < resultComparsion) ? heap[i] : result;
+		}
+		return result;
 	}
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new HeapIterator();
 	}
 
 	@Override
 	public E lower(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		E result = heap[size()];
+		if (e.compareTo(result) > 0)
+			return null;
+		for (int i = size() - 1; i > -1; i--) {
+			int heapComparison = heap[i].compareTo(e);
+			int resultComparsion = result.compareTo(e);
+			result = (heapComparison < 0)
+					&& (heapComparison > resultComparsion) ? heap[i] : result;
+		}
+		return result;
 	}
 
 	/**
@@ -148,12 +222,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 			throw new IndexOutOfBoundsException("Index less than zero.");
 		else if (index >= heap.length)
 			throw new IndexOutOfBoundsException("Index greater than capacity.");
-		int size = array.length;
-		if (2 * index + 1 < size
+		if (2 * index + 1 < size()
 				&& array[index].compareTo(array[2 * index + 1]) < 0) {
 			Arrays.swap(array, index, 2 * index + 1);
 			maxHeapify(array, 2 * index + 1);
-		} else if (2 * index + 2 < size
+		} else if (2 * index + 2 < size()
 				&& array[index].compareTo(array[2 * index + 2]) < 0) {
 			Arrays.swap(array, index, 2 * index + 2);
 			maxHeapify(array, 2 * index + 2);
@@ -176,8 +249,11 @@ public class ArrayPriorityQueue<E extends Comparable<? super E>> extends
 
 	@Override
 	public E remove() {
-		// TODO Auto-generated method stub
-		return null;
+		E result = heap[0];
+		heap[0] = heap[--size];
+		heap[size] = null;
+		maxHeapify(heap, 0);
+		return result;
 	}
 
 	private void siftUp(int index) {

@@ -119,6 +119,28 @@ public class Collections {
 	}
 
 	/**
+	 * Sorts a list by heapifying it. Least elements are last.
+	 * 
+	 * Stability: Equal elements are changed.
+	 * 
+	 * Extra Space: O(n) * this implementation is o(n)...thanks Java!! *
+	 * 
+	 * Comparisons and Swaps: O(nlog(n))
+	 * 
+	 * @param list
+	 *            subject of heapSort
+	 * @param <T>
+	 *            type of element
+	 */
+	public static <T extends Comparable<? super T>> void heapSort(List<T> list) {
+		ArrayPriorityQueue<T> heap = new ArrayPriorityQueue<T>();
+		for (int i = 0; i < list.size(); i++)
+			heap.add(list.get(i));
+		for (int i = 0; i < list.size(); i++)
+			list.set(i, heap.remove());
+	}
+
+	/**
 	 * Returns the greatest element within a given list.
 	 * 
 	 * This implementation returns the index of the first occurrence of max.

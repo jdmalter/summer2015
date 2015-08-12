@@ -20,6 +20,19 @@ public class Collections {
 	}
 
 	/**
+	 * Converts a list into an array.
+	 * 
+	 * @param list
+	 *            target list
+	 * @return array form
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] asArray(List<T> list) {
+		// suppress safe since cast recasts list into its type
+		return list.toArray((T[]) new Object[list.size()]);
+	}
+
+	/**
 	 * Finds the index of a given element in a given sorted list.
 	 * 
 	 * PRECONDITION: List is sorted from least to greatest, and elements are

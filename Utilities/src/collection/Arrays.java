@@ -20,6 +20,20 @@ public class Arrays {
 	}
 
 	/**
+	 * Converts an array into a list.
+	 * 
+	 * @param array
+	 *            target array
+	 * @return list form
+	 */
+	public static <T> List<T> asList(T[] array) {
+		List<T> list = new CircularArray<T>();
+		for (int i = 0; i < array.length; i++)
+			list.add(array[i]);
+		return list;
+	}
+
+	/**
 	 * Finds the index of a given element in a given sorted array.
 	 * 
 	 * PRECONDITION: Array is sorted from least to greatest, and elements are
@@ -61,6 +75,26 @@ public class Arrays {
 	public static <T extends Comparable<? super T>> void buildMaxHeap(T[] array) {
 		for (int i = (array.length - 2) / 2; i > -1; i--)
 			maxHeapify(array, i);
+	}
+
+	/**
+	 * Copies parameter array into a new array of given length. If the given
+	 * array length is greater than the new length, the given array length will
+	 * be used in the copy, otherwise the new length will be used.
+	 * 
+	 * @param array
+	 *            copied array
+	 * @param newLength
+	 *            new length or array.length, whichever is greater
+	 * @return new array
+	 */
+	public static <T> T[] copy(T[] array, int newLength) {
+		newLength = array.length > newLength ? array.length : newLength;
+		@SuppressWarnings("unchecked")
+		T[] newArray = (T[]) new Object[newLength];
+		for (int i = 0; i < array.length; i++)
+			newArray[i] = array[i];
+		return newArray;
 	}
 
 	/**

@@ -107,8 +107,16 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 		@Override
 		public E ceiling(E e) {
-			// TODO Auto-generated method stub
-			return null;
+			Node<E> result = null;
+			if (size() > 0) {
+				result = tail.prev;
+				while (result != null && result.prev != null
+						&& compare(e, result.data) >= 0) {
+					result = result.prev;
+				}
+				result = result.next;
+			}
+			return result == null ? null : result.data;
 		}
 
 		@Override
@@ -198,14 +206,30 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 		@Override
 		public E floor(E e) {
-			// TODO Auto-generated method stub
-			return null;
+			Node<E> result = null;
+			if (size() > 0) {
+				result = head.next;
+				while (result != null && result.next != null
+						&& compare(e, result.data) <= 0) {
+					result = result.next;
+				}
+				result = result.prev;
+			}
+			return result == null ? null : result.data;
 		}
 
 		@Override
 		public E higher(E e) {
-			// TODO Auto-generated method stub
-			return null;
+			Node<E> result = null;
+			if (size() > 0) {
+				result = tail.prev;
+				while (result != null && result.prev != null
+						&& compare(e, result.data) > 0) {
+					result = result.prev;
+				}
+				result = result.next;
+			}
+			return result == null ? null : result.data;
 		}
 
 		@Override
@@ -248,20 +272,26 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 		@Override
 		public E lower(E e) {
-			// TODO Auto-generated method stub
-			return null;
+			Node<E> result = null;
+			if (size() > 0) {
+				result = head.next;
+				while (result != null && result.next != null
+						&& compare(e, result.data) < 0) {
+					result = result.next;
+				}
+				result = result.prev;
+			}
+			return result == null ? null : result.data;
 		}
 
 		@Override
 		public E maximum() {
-			// TODO Auto-generated method stub
-			return null;
+			return size() > 0 ? tail.prev.data : null;
 		}
 
 		@Override
 		public E minimum() {
-			// TODO Auto-generated method stub
-			return null;
+			return size() > 0 ? head.next.data : null;
 		}
 
 		@Override
@@ -336,8 +366,13 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E ceiling(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		SkipLinkedList.Node<E> result = higherNode(e);
+		while (result != null && result.prev != null
+				&& compare(e, result.data) >= 0) {
+			result = result.prev;
+		}
+		result = result.next;
+		return result == null ? null : result.data;
 	}
 
 	@Override
@@ -364,7 +399,12 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public boolean contains(Object obj) {
-		// TODO Auto-generated method stub
+		SkipLinkedList.Node<E> current = lists.get(0).head.next;
+		while (current != null && current.next != null) {
+			if (current.data.equals(obj))
+				return true;
+			current = current.next;
+		}
 		return false;
 	}
 
@@ -376,14 +416,38 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E floor(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		SkipLinkedList.Node<E> result = lowerNode(e);
+		while (result != null && result.next != null
+				&& compare(e, result.data) <= 0) {
+			result = result.next;
+		}
+		result = result.prev;
+		return result == null ? null : result.data;
 	}
 
 	@Override
 	public E higher(E e) {
-		// TODO Auto-generated method stub
-		return null;
+		SkipLinkedList.Node<E> result = higherNode(e);
+		return result == null ? null : result.data;
+	}
+
+	private SkipLinkedList.Node<E> higherNode(E e) {
+		if (compare(e, lists.get(0).head.next.data) <= 0)
+			return lists.get(0).head;
+		int level = lists.size() - 1;
+		SkipLinkedList.Node<E> current = lists.get(level).tail;
+		while (current != null) {
+			while (current.prev != null && compare(e, current.data) > 0) {
+				current = current.prev;
+			}
+			current = current.next;
+			if (level > 0) {
+				current = current.child;
+				level--;
+			} else
+				return current;
+		}
+		return lists.get(0).tail;
 	}
 
 	@Override
@@ -404,7 +468,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		int level = lists.size() - 1;
 		SkipLinkedList.Node<E> current = lists.get(level).head;
 		while (current != null) {
-			while (compare(e, current.data) < 0) {
+			while (current.next != null && compare(e, current.data) < 0) {
 				current = current.next;
 			}
 			current = current.prev;
@@ -419,14 +483,12 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E maximum() {
-		// TODO Auto-generated method stub
-		return null;
+		return lists.get(0).maximum();
 	}
 
 	@Override
 	public E minimum() {
-		// TODO Auto-generated method stub
-		return null;
+		return lists.get(0).minimum();
 	}
 
 	private void promote(int level, SkipLinkedList.Node<E> node) {

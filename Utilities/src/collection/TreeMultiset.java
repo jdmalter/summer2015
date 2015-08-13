@@ -28,12 +28,12 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		/**
 		 * Creates an in-order TreeIterator given a direction.
 		 * 
-		 * @param movesForward
-		 *            ? starts at lowest and goes to highest : starts at highest
-		 *            and goes to lowest
+		 * @param forward
+		 *            if true, iterator starts at lowest and goes to highest ;
+		 *            if false, iterator starts at highest and goes to lowest
 		 */
-		private TreeIterator(boolean movesForward) {
-			this.movesForward = movesForward;
+		private TreeIterator(boolean forward) {
+			this.movesForward = forward;
 			stack = new CircularArray<Node<E>>();
 			Node<E> current = root;
 			if (movesForward) {
@@ -197,7 +197,8 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 				sibling.parent.isBlack = true;
 				sibling.isBlack = false;
 				if (flag)
-					recolorRemove(sibling.parent, sibling.parent.parent);
+					recolorRemove(sibling.parent, sibling.parent.parent,
+							sibling.parent == sibling.parent.parent.left);
 				return true;
 			}
 		}
@@ -415,6 +416,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		// Root case
 		if (root == null) {
 			root = node;
+			root.isBlack = true;
 			size++;
 			return true;
 		}
@@ -493,25 +495,28 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 			Node<E> ceiling = ceiling(current);
 
 			// Find which node is closer to current
-			Node<E> currentCandidate = compare(comparator(), floor.data,
-					current.data) < compare(comparator(), current.data,
-					ceiling.data) ? floor : ceiling;
+			Node<E> currentCandidate = floor == null && ceiling == null ? current
+					: floor == null && ceiling != null ? ceiling
+							: floor != null && ceiling == null ? floor
+									: compare(comparator(), floor.data,
+											current.data) < compare(
+											comparator(), current.data,
+											ceiling.data) ? floor : ceiling;
 
 			// Replace current node with candidate
 			if (currentCandidate == current) {
 				// Current has no children
 				if (current.parent != null) {
-					if (current == current.parent.left)
+					if (current == current.parent.left) {
 						current.parent.left = null;
-					else if (current == current.parent.right)
+						recolorRemove(current, current.parent, true);
+					} else if (current == current.parent.right) {
 						current.parent.right = null;
-					else
-						throw new AssertionError(
-								"rbRemove(1): Logically unreachable.");
+						recolorRemove(current, current.parent, false);
+					}
 				}
 
 				// Clip leaf
-				recolorRemove(current, current.parent);
 				current = null;
 				size--;
 				return true;
@@ -526,7 +531,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 
 				// Link over floor
 				floor.parent.right = floor.left;
-				recolorRemove(floor, floor.parent);
+				recolorRemove(floor, floor.parent, false);
 				floor = null;
 				size--;
 				return true;
@@ -541,7 +546,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 
 				// Link over ceiling
 				ceiling.parent.left = ceiling.right;
-				recolorRemove(ceiling, ceiling.parent);
+				recolorRemove(ceiling, ceiling.parent, true);
 				ceiling = null;
 				size--;
 				return true;
@@ -564,10 +569,12 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 				if (child.parent == child.parent.parent.left) {
 					// Parent is left child
 					if (!redUncle(child, child.parent.parent.right)) {
-						if (child == child.parent.right)
-							rotateLeft(child.parent);
+						if (child == child.parent.right) {
+							child = child.parent;
+							rotateLeft(child);
+						}
 
-						// child is right right grandchild
+						// child is left left grandchild
 						child.parent.isBlack = true;
 						child.parent.parent.isBlack = false;
 						rotateRight(child.parent.parent);
@@ -576,18 +583,18 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 				} else if (child.parent == child.parent.parent.right) {
 					// Parent is right child
 					if (!redUncle(child, child.parent.parent.left)) {
-						if (child == child.parent.left)
-							rotateRight(child.parent);
+						if (child == child.parent.left) {
+							child = child.parent;
+							rotateRight(child);
+						}
 
-						// child is left left grandchild
+						// child is right right grandchild
 						child.parent.isBlack = true;
 						child.parent.parent.isBlack = false;
 						rotateLeft(child.parent.parent);
 					}
 
-				} else
-					throw new AssertionError(
-							"recolorAdd: Logically unreachable.");
+				}
 
 			}
 		}
@@ -604,11 +611,11 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	 *            removed node parent
 	 * @return true if operation was run, false otherwise
 	 */
-	private boolean recolorRemove(Node<E> child, Node<E> parent) {
+	private boolean recolorRemove(Node<E> child, Node<E> parent, boolean wasLeft) {
 		if (child == null || child.isBlack)
 			while (child != root) {
 				if (parent != null) {
-					if (child == parent.left) {
+					if (wasLeft) {
 						// child is left child
 						if (redSibling(parent.right))
 							rotateLeft(parent);
@@ -618,7 +625,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 							// sibling has red children
 							blackRightSibling(parent.right);
 						}
-					} else if (child == parent.right) {
+					} else {
 						// child is right child
 						if (redSibling(parent.left))
 							rotateRight(parent);
@@ -628,9 +635,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 							// sibling has red children
 							blackLeftSibling(parent.left);
 						}
-					} else
-						throw new AssertionError(
-								"recolorRemove: Logically unreachable.");
+					}
 				}
 				return true;
 			}
@@ -666,7 +671,8 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	 * @return true if operation run, false otherwise
 	 */
 	private boolean redUncle(Node<E> child, Node<E> uncle) {
-		if (uncle != null && !uncle.isBlack) {
+		if ((uncle != null && !uncle.isBlack)
+				|| (child.parent.isBlack && (uncle == null || uncle.isBlack))) {
 			child.parent.isBlack = true;
 			child.parent.parent.isBlack = false;
 			uncle.isBlack = true;

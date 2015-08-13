@@ -24,6 +24,8 @@ public class Collections {
 	 * 
 	 * @param list
 	 *            target list
+	 * @param <T>
+	 *            type of element
 	 * @return array form
 	 */
 	@SuppressWarnings("unchecked")

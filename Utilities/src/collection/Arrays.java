@@ -24,6 +24,8 @@ public class Arrays {
 	 * 
 	 * @param array
 	 *            target array
+	 * @param <T>
+	 *            type of element
 	 * @return list form
 	 */
 	public static <T> List<T> asList(T[] array) {
@@ -86,6 +88,8 @@ public class Arrays {
 	 *            copied array
 	 * @param newLength
 	 *            new length or array.length, whichever is greater
+	 * @param <T>
+	 *            type of element
 	 * @return new array
 	 */
 	public static <T> T[] copy(T[] array, int newLength) {

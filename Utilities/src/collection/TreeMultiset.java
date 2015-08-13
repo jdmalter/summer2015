@@ -119,7 +119,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	/**
 	 * Constructs an empty TreeMultiset using given comparator.
 	 * 
-	 * @param comparator
+	 * @param comp
 	 *            ordering being used
 	 */
 	public TreeMultiset(Comparator<? super E> comp) {

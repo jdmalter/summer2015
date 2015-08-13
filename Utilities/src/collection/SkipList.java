@@ -2,6 +2,7 @@ package collection;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 /**
@@ -58,6 +59,46 @@ public class SkipList<E extends Comparable<? super E>> extends
 				this.data = data;
 				this.next = next;
 				this.prev = prev;
+			}
+
+		}
+
+		/**
+		 * Iterator for individual linked list.
+		 * 
+		 * @author Jacob Malter
+		 *
+		 * @param <E>
+		 *            the type of elements stored in this collection.
+		 */
+		private class SkipIterator implements Iterator<E> {
+
+			private SkipLinkedList.Node<E> cursor;
+			private boolean direction;
+
+			private SkipIterator() {
+				this(true);
+			}
+
+			private SkipIterator(boolean forward) {
+				direction = forward;
+				cursor = direction ? head.next : tail.prev;
+
+			}
+
+			@Override
+			public boolean hasNext() {
+				return direction ? cursor.next.next != null
+						: cursor.prev.prev != null;
+			}
+
+			@Override
+			public E next() {
+				if (!hasNext())
+					throw new NoSuchElementException();
+				E result = cursor.data;
+				cursor = direction ? cursor.next : cursor.prev;
+				return result;
 			}
 
 		}
@@ -144,9 +185,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		private void constructHeadTail() {
 			// suppression safe since head and tail will not be modified
 			head = (Node<E>) new Node<Object>(Node.LEAST, null, null);
-			;
 			tail = (Node<E>) new Node<Object>(Node.GREATEST, null, null);
-			;
 			head.next = tail;
 			tail.prev = head;
 		}
@@ -200,8 +239,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 		@Override
 		public Iterator<E> descendingIterator() {
-			// TODO Auto-generated method stub
-			return null;
+			return new SkipIterator(false);
 		}
 
 		@Override
@@ -234,8 +272,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 		@Override
 		public Iterator<E> iterator() {
-			// TODO Auto-generated method stub
-			return null;
+			return new SkipIterator();
 		}
 
 		/**
@@ -399,19 +436,29 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public boolean contains(Object obj) {
-		SkipLinkedList.Node<E> current = lists.get(0).head.next;
-		while (current != null && current.next != null) {
-			if (current.data.equals(obj))
-				return true;
-			current = current.next;
+		try {
+			@SuppressWarnings("unchecked")
+			E other = (E) obj;
+			SkipLinkedList.Node<E> current = lists.get(size() - 1).head.next;
+			while (current != null) {
+				while (current.next != null && compare(other, current.data) < 0) {
+					current = current.next;
+				}
+				current = current.prev;
+				if (current.child != null)
+					current = current.child;
+				else if (compare(other, current.data) == 0)
+					return true;
+			}
+		} catch (ClassCastException e) {
+			return false;
 		}
 		return false;
 	}
 
 	@Override
 	public Iterator<E> descendingIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return lists.get(0).descendingIterator();
 	}
 
 	@Override
@@ -434,17 +481,15 @@ public class SkipList<E extends Comparable<? super E>> extends
 	private SkipLinkedList.Node<E> higherNode(E e) {
 		if (compare(e, lists.get(0).head.next.data) <= 0)
 			return lists.get(0).head;
-		int level = lists.size() - 1;
-		SkipLinkedList.Node<E> current = lists.get(level).tail;
+		SkipLinkedList.Node<E> current = lists.get(lists.size() - 1).tail;
 		while (current != null) {
 			while (current.prev != null && compare(e, current.data) > 0) {
 				current = current.prev;
 			}
 			current = current.next;
-			if (level > 0) {
+			if (current.child != null)
 				current = current.child;
-				level--;
-			} else
+			else
 				return current;
 		}
 		return lists.get(0).tail;
@@ -452,8 +497,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return lists.get(0).iterator();
 	}
 
 	@Override
@@ -518,9 +562,36 @@ public class SkipList<E extends Comparable<? super E>> extends
 		}
 	}
 
+	private void demote(int level, SkipLinkedList.Node<E> node) {
+		if (level < lists.size() && node != null) {
+			demote(level + 1, node.parent);
+			node.prev.next = node.next;
+			node = null;
+		}
+	}
+
 	@Override
 	public boolean remove(Object obj) {
-		// TODO Auto-generated method stub
+		try {
+			@SuppressWarnings("unchecked")
+			E other = (E) obj;
+			SkipLinkedList.Node<E> current = lists.get(size() - 1).head.next;
+			while (current != null) {
+				while (current.next != null && compare(other, current.data) < 0) {
+					current = current.next;
+				}
+				current = current.prev;
+				if (current.child != null)
+					current = current.child;
+				else if (compare(other, current.data) == 0) {
+					demote(0, current);
+					size--;
+					return true;
+				}
+			}
+		} catch (ClassCastException e) {
+			return false; // obj is not correct type
+		}
 		return false;
 	}
 

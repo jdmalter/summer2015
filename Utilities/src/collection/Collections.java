@@ -14,6 +14,8 @@ public class Collections {
 	public static final Collection<?> EMPTY_COLLECTION = new CircularArray<Object>();
 	/** Empty collection used for fast iteration and remove operations. */
 	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArray<Object>();
+	/** Empty collection used for comparable elements. */
+	public static final Collection<?> EMPTY_COMPARABLE_COLLECTION = new ArrayPriorityQueue<Comparable<Object>>();
 	private static final int QUICK_TO_INSERT_SORT = 24;
 
 	private Collections() {

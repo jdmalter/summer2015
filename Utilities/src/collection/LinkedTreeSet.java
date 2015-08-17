@@ -36,7 +36,7 @@ public class LinkedTreeSet<E extends Comparable<? super E>> extends TreeSet<E> {
 	@SuppressWarnings("unchecked")
 	public LinkedTreeSet(Comparator<? super E> comparator) {
 		super(comparator);
-		linkedEntries = (Collection<E>) Collections.ITERABLE_AND_REMOVE_COLLECTION;
+		linkedEntries = (Collection<E>) Collections.EMPTY_COMPARABLE_COLLECTION;
 	}
 
 	@Override

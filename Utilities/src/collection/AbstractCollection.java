@@ -29,19 +29,15 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 	@Override
 	public boolean addAll(Collection<? extends E> coll) {
 		boolean changed = false;
-		for (E e : coll)
-			if (add(e))
-				changed = true;
+		for (E e : coll) {
+			changed = changed | add(e);
+		}
 		return changed;
 	}
 
 	@Override
 	public void clear() {
-		Iterator<E> it = iterator();
-		while (it.hasNext()) {
-			it.next();
-			it.remove();
-		}
+		forEach((element) -> remove(element));
 	}
 
 	@Override
@@ -126,9 +122,6 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 
 	@Override
 	public boolean removeAll(Collection<?> coll) {
-		if (coll == null)
-			throw new NullPointerException("Null parameter collection");
-
 		boolean changed = false;
 		Iterator<E> it = iterator();
 		while (it.hasNext())
@@ -141,9 +134,6 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 
 	@Override
 	public boolean retainAll(Collection<?> coll) {
-		if (coll == null)
-			throw new NullPointerException("Null parameter collection");
-
 		boolean changed = false;
 		Iterator<E> it = iterator();
 		while (it.hasNext())
@@ -238,5 +228,4 @@ public abstract class AbstractCollection<E> implements Collection<E> {
 
 		return sb.toString();
 	}
-
 }

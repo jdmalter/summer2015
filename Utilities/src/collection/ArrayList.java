@@ -5,14 +5,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Container satisfying list and dequeue interfaces on top of a circular array.
+ * Container satisfying list and dequeue interfaces on top of a normal array.
  * 
  * @author Jacob Malter
  * 
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class CircularArray<E> extends AbstractDequeList<E> {
+public class ArrayList<E> extends AbstractDequeList<E> {
 
 	/**
 	 * List iterator.
@@ -154,16 +154,17 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 
 	/** memory for data */
 	private E[] data;
+
 	/**
-	 * index of first element, number of elements, index of last element
+	 * number of elements, index of last element
 	 */
-	private int head, size, tail;
+	private int size;
 
 	/**
 	 * Constructs a circular array with default capacity.
 	 */
 	@SuppressWarnings("unchecked")
-	public CircularArray() {
+	public ArrayList() {
 		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
 		// suppression safe since only elements of type E will be inserted
 	}
@@ -173,12 +174,8 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 		rangeCheck(index);
 		ensureCapacity(size() + 1);
 
-		if (index > tail / 2)
-			rotateRightAfterIndex(index);
-		else
-			rotateLeftBeforeIndex(index);
-		set(index, obj);
-		tail = index > tail ? index : tail;
+		rotateRightAfterIndex(index);
+		data[index] = obj;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -186,14 +183,9 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	public void clear() {
 		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
 		// suppression safe since only elements of type E will be inserted
-		head = 0;
 		size = 0;
-		tail = 0;
 	}
 
-	/**
-	 * This implementation ignores changes to underlying CircularArray.
-	 */
 	@Override
 	public Iterator<E> descendingIterator() {
 		return new LstIterator(false);
@@ -213,29 +205,17 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	@Override
 	public E get(int index) {
 		rangeCheck(index);
-		return data[(head + index) % data.length];
+		return data[index];
 	}
 
 	@Override
 	public int indexOf(Object obj) {
-		if (head < tail) {
-			for (int i = head; i < tail; i++)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-		} else if (head > tail) {
-			for (int i = head; i < data.length; i++)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-			for (int i = 0; i < tail; i++)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-		}
+		for (int i = 0; i < data.length; i++)
+			if (data[i] == null ? obj == null : data[i].equals(obj))
+				return i;
 		return -1;
 	}
 
-	/**
-	 * This implementation ignores changes to underlying CircularArray.
-	 */
 	@Override
 	public Iterator<E> iterator() {
 		return new LstIterator();
@@ -243,24 +223,12 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 
 	@Override
 	public int lastIndexOf(Object obj) {
-		if (tail > head) {
-			for (int i = tail; i > head - 1; i--)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-		} else if (tail < head) {
-			for (int i = tail; i > -1; i--)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-			for (int i = data.length - 1; i > head - 1; i--)
-				if (data[i] == null ? obj == null : data[i].equals(obj))
-					return i;
-		}
+		for (int i = data.length - 1; i > -1; i--)
+			if (data[i] == null ? obj == null : data[i].equals(obj))
+				return i;
 		return -1;
 	}
 
-	/**
-	 * This implementation ignores changes to underlying CircularArray.
-	 */
 	@Override
 	public ListIterator<E> listIterator(int index) {
 		return new LstIterator(index);
@@ -275,28 +243,22 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	 *             if index is less than 0 or greater than capacity
 	 */
 	private void rangeCheck(int index) {
-		if (0 > index)
+		if (0 > index || index >= data.length)
 			throw new IndexOutOfBoundsException();
-		else if (index >= data.length)
-			ensureCapacity(data.length);
 	}
 
 	@Override
 	public E remove(int index) {
 		rangeCheck(index);
 
-		int newIndex = (head + index) % data.length;
-		E result = data[newIndex];
-		if (index > tail / 2)
-			rotateLeftAfterIndex(index);
-		else
-			rotateRightBeforeIndex(index);
+		E result = data[index];
+		rotateLeftAfterIndex(index);
 		return result;
 	}
 
 	/**
-	 * Shifts a range left by one after but not including given index. Moves the
-	 * tail of the range lower in index.
+	 * Shifts a range left by one after but not including given index. Decreases
+	 * the size.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -306,37 +268,14 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	private void rotateLeftAfterIndex(int fromIndex) {
 		rangeCheck(fromIndex);
 
-		for (int i = fromIndex; i < tail; i++)
+		for (int i = fromIndex; i < size; i++)
 			data[i] = data[i + 1];
-		data[tail] = null;
-
-		tail--;
-		size--;
+		data[size--] = null;
 	}
 
 	/**
-	 * Shifts a range left by one before but not including given index. Moves
-	 * the head of the range lower in index. Replaces item at given index.
-	 * 
-	 * Precondition: Index already translated.
-	 * 
-	 * @param fromIndex
-	 *            starting position
-	 */
-	private void rotateLeftBeforeIndex(int fromIndex) {
-		rangeCheck(fromIndex);
-		ensureCapacity(size() + 1);
-
-		for (int i = --head; i < fromIndex; i++)
-			data[i] = data[i + 1];
-
-		head--;
-		size++;
-	}
-
-	/**
-	 * Shifts a range right by one after but not including given index. Moves
-	 * the tail of the range higher in index.
+	 * Shifts a range right by one after but not including given index.
+	 * Increases the size.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -347,40 +286,16 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 		rangeCheck(fromIndex);
 		ensureCapacity(size() + 1);
 
-		for (int i = tail++; i > fromIndex; i--)
+		for (int i = size++; i > fromIndex; i--)
 			data[i] = data[i - 1];
-
-		tail++;
-		size++;
-	}
-
-	/**
-	 * Shifts a range right by one before but not including given index. Moves
-	 * the head of the range higher in index. Replaces item at given index.
-	 * 
-	 * Precondition: Index already translated.
-	 * 
-	 * @param fromIndex
-	 *            starting position
-	 */
-	private void rotateRightBeforeIndex(int fromIndex) {
-		rangeCheck(fromIndex);
-
-		for (int i = fromIndex; i > head - 1; i--)
-			data[i] = data[i - 1];
-		data[head] = null;
-
-		head++;
-		size--;
 	}
 
 	@Override
 	public E set(int index, E obj) {
 		rangeCheck(index);
 
-		int newIndex = (head + index) % data.length;
-		E result = data[newIndex];
-		data[newIndex] = obj;
+		E result = data[index];
+		data[index] = obj;
 		return result;
 	}
 

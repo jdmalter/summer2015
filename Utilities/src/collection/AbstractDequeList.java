@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
  *            The type of the elements stored in this collection.
  */
 public abstract class AbstractDequeList<E> extends AbstractDeque<E> implements
-		Deque<E>, List<E> {
+		List<E> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {

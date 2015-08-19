@@ -173,12 +173,25 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 		rangeCheck(index);
 		ensureCapacity(size() + 1);
 
-		if (index > tail / 2)
-			rotateRightAfterIndex(index);
-		else
-			rotateLeftBeforeIndex(index);
-		set(index, obj);
-		tail = index > tail ? index : tail;
+		if (index == 0) {
+			// First element
+			head = head <= 0 ? data.length - 1 : head - 1;
+			data[head] = obj;
+			size++;
+		} else if (index >= size()) {
+			// Last element
+			data[tail] = obj;
+			tail = tail >= data.length - 1 ? 0 : tail + 1;
+			size++;
+		} else {
+			// Add in between elements
+			int newIndex = translate(index);
+			if (newIndex > (head + tail) / 2)
+				rotateRightAfterIndex(newIndex);
+			else
+				rotateLeftBeforeIndex(newIndex);
+			data[newIndex] = obj;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -213,7 +226,7 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	@Override
 	public E get(int index) {
 		rangeCheck(index);
-		return data[(head + index) % data.length];
+		return data[index];
 	}
 
 	@Override
@@ -275,28 +288,38 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	 *             if index is less than 0 or greater than capacity
 	 */
 	private void rangeCheck(int index) {
-		if (0 > index)
+		if (0 > index || index >= data.length)
 			throw new IndexOutOfBoundsException();
-		else if (index >= data.length)
-			ensureCapacity(data.length);
 	}
 
 	@Override
 	public E remove(int index) {
 		rangeCheck(index);
 
-		int newIndex = (head + index) % data.length;
+		int newIndex = translate(index);
 		E result = data[newIndex];
-		if (index > tail / 2)
-			rotateLeftAfterIndex(index);
-		else
-			rotateRightBeforeIndex(index);
+		if (index == 0) {
+			// First element
+			data[head] = null;
+			head = head >= data.length - 1 ? 0 : head + 1;
+			size--;
+		} else if (index >= size()) {
+			// Last element
+			data[tail - 1] = null;
+			tail = tail <= 0 ? data.length - 1 : tail - 1;
+			size--;
+		} else {
+			if (newIndex > (head + tail) / 2)
+				rotateLeftAfterIndex(newIndex);
+			else
+				rotateRightBeforeIndex(newIndex);
+		}
 		return result;
 	}
 
 	/**
-	 * Shifts a range left by one after but not including given index. Moves the
-	 * tail of the range lower in index.
+	 * Shifts a range left by one after the given index. Moves the tail of the
+	 * range lower in index. Replaces item at given index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -315,8 +338,8 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	}
 
 	/**
-	 * Shifts a range left by one before but not including given index. Moves
-	 * the head of the range lower in index. Replaces item at given index.
+	 * Shifts a range left by one before the given index. Moves the head of the
+	 * range lower in index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -327,7 +350,7 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 		rangeCheck(fromIndex);
 		ensureCapacity(size() + 1);
 
-		for (int i = --head; i < fromIndex; i++)
+		for (int i = head; i < fromIndex; i++)
 			data[i] = data[i + 1];
 
 		head--;
@@ -335,8 +358,8 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	}
 
 	/**
-	 * Shifts a range right by one after but not including given index. Moves
-	 * the tail of the range higher in index.
+	 * Shifts a range right by one after the given index. Moves the tail of the
+	 * range higher in index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -355,8 +378,8 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	}
 
 	/**
-	 * Shifts a range right by one before but not including given index. Moves
-	 * the head of the range higher in index. Replaces item at given index.
+	 * Shifts a range right by one before the given index. Moves the head of the
+	 * range higher in index. Replaces item at given index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -378,7 +401,7 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	public E set(int index, E obj) {
 		rangeCheck(index);
 
-		int newIndex = (head + index) % data.length;
+		int newIndex = translate(index);
 		E result = data[newIndex];
 		data[newIndex] = obj;
 		return result;
@@ -387,6 +410,17 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	@Override
 	public int size() {
 		return size;
+	}
+
+	/**
+	 * Translate user index into index useful for circular array.
+	 * 
+	 * @param index
+	 *            position in zero-based list
+	 * @return position in circular array
+	 */
+	private int translate(int index) {
+		return (index + head) % data.length;
 	}
 
 }

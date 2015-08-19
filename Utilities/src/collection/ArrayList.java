@@ -257,8 +257,8 @@ public class ArrayList<E> extends AbstractDequeList<E> {
 	}
 
 	/**
-	 * Shifts a range left by one after but not including given index. Decreases
-	 * the size.
+	 * Shifts a range left by one after the given index. Moves the tail of the
+	 * range lower in index. Replaces item at given index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 
@@ -274,8 +274,8 @@ public class ArrayList<E> extends AbstractDequeList<E> {
 	}
 
 	/**
-	 * Shifts a range right by one after but not including given index.
-	 * Increases the size.
+	 * Shifts a range right by one after the given index. Moves the tail of the
+	 * range higher in index.
 	 * 
 	 * Precondition: Index already translated.
 	 * 

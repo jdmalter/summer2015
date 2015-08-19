@@ -29,7 +29,7 @@ public class Arrays {
 	 * @return list form
 	 */
 	public static <T> List<T> asList(T[] array) {
-		List<T> list = new CircularArray<T>();
+		List<T> list = new CircularArrayList<T>();
 		for (int i = 0; i < array.length; i++)
 			list.add(array[i]);
 		return list;
@@ -111,7 +111,7 @@ public class Arrays {
 	 * @return array of int with each number being a digit in the new number
 	 */
 	public static int[] decompse(int value, int base) {
-		Stack<Integer> stack = new CircularArray<Integer>();
+		Stack<Integer> stack = new CircularArrayList<Integer>();
 		while (value > 0 && base > 1) {
 			stack.push(value % base);
 			value = value / base;

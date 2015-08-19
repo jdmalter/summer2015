@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * @param <E>
  *            The type of the elements stored in this collection.
  */
-public class CircularArray<E> extends AbstractDequeList<E> {
+public class CircularArrayList<E> extends AbstractDequeList<E> {
 
 	/**
 	 * List iterator.
@@ -163,7 +163,7 @@ public class CircularArray<E> extends AbstractDequeList<E> {
 	 * Constructs a circular array with default capacity.
 	 */
 	@SuppressWarnings("unchecked")
-	public CircularArray() {
+	public CircularArrayList() {
 		data = (E[]) collection.Arrays.DEFAULT_ARRAY;
 		// suppression safe since only elements of type E will be inserted
 	}

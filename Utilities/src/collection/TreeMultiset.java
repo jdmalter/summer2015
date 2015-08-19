@@ -34,7 +34,7 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 		 */
 		private TreeIterator(boolean forward) {
 			this.movesForward = forward;
-			stack = new CircularArray<Node<E>>();
+			stack = new CircularArrayList<Node<E>>();
 			Node<E> current = root;
 			if (movesForward) {
 				while (current != null) {

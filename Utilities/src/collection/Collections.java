@@ -11,9 +11,9 @@ import java.util.Random;
 public class Collections {
 
 	/** Empty collection for general use. */
-	public static final Collection<?> EMPTY_COLLECTION = new CircularArray<Object>();
+	public static final Collection<?> EMPTY_COLLECTION = new CircularArrayList<Object>();
 	/** Empty collection used for fast iteration and remove operations. */
-	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArray<Object>();
+	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArrayList<Object>();
 	/** Empty collection used for comparable elements. */
 	public static final Collection<?> EMPTY_COMPARABLE_COLLECTION = new ArrayPriorityQueue<Comparable<Object>>();
 	private static final int QUICK_TO_INSERT_SORT = 24;
@@ -77,12 +77,12 @@ public class Collections {
 	 * @return list of Integer with each number being a digit in the new number
 	 */
 	public static List<Integer> decompse(int value, int base) {
-		Stack<Integer> stack = new CircularArray<Integer>();
+		Stack<Integer> stack = new CircularArrayList<Integer>();
 		while (value > 0 && base > 1) {
 			stack.push(value % base);
 			value = value / base;
 		}
-		List<Integer> result = new CircularArray<Integer>();
+		List<Integer> result = new CircularArrayList<Integer>();
 		while (!stack.isEmpty())
 			result.add(stack.pop());
 		return result;
@@ -203,10 +203,10 @@ public class Collections {
 		int half = list.size() / 2;
 
 		// suppress safe since only elements of type T will be copied into list
-		List<T> firstHalf = new CircularArray<T>();
+		List<T> firstHalf = new CircularArrayList<T>();
 		for (int i = 0; i < half; i++)
 			firstHalf.set(i, list.get(i));
-		List<T> secondHalf = new CircularArray<T>();
+		List<T> secondHalf = new CircularArrayList<T>();
 		for (int i = half; i < list.size(); i++)
 			secondHalf.set(i, list.get(i));
 

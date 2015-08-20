@@ -24,7 +24,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 	 * @param <E>
 	 *            The type of the elements stored in this collection.
 	 */
-	private static class SkipLinkedList<E extends Comparable<? super E>>
+	private static class OrderedLinkedList<E extends Comparable<? super E>>
 			extends AbstractCollection<E> implements Navigable<E> {
 
 		/**
@@ -73,7 +73,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		 */
 		private class SkipIterator implements Iterator<E> {
 
-			private SkipLinkedList.Node<E> cursor;
+			private OrderedLinkedList.Node<E> cursor;
 			private boolean direction;
 
 			private SkipIterator() {
@@ -112,7 +112,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		/**
 		 * Constructs an empty skiplist.
 		 */
-		public SkipLinkedList() {
+		public OrderedLinkedList() {
 			this(null);
 		}
 
@@ -122,7 +122,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		 * @param comp
 		 *            ordering being used
 		 */
-		public SkipLinkedList(Comparator<? super E> comp) {
+		public OrderedLinkedList(Comparator<? super E> comp) {
 			comparator = comp;
 			constructHeadTail();
 		}
@@ -134,10 +134,12 @@ public class SkipList<E extends Comparable<? super E>> extends
 			else if (compare(obj, tail.prev.data) > 0)
 				return linkTail(obj);
 
-			Node<E> current = head.next;
-			while (current != null && compare(obj, current.data) < 0) {
+			Node<E> current = head;
+			while (current.next != null && compare(obj, current.next.data) < 0) {
 				current = current.next;
 			}
+			// current never will be null since compare(obj, Node.GREATEST)
+			// always returns Integer.MIN_VALUE and will break at the tail
 			Node<E> insert = new Node<E>(obj, current, current.next);
 			if (current.next != null)
 				current.next.prev = insert;
@@ -340,7 +342,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 					return delinkTail() != null;
 				else {
 					Node<E> current = head.next;
-					while (current != null && current.next != null) {
+					while (current.next != null) {
 						if (current.data.equals(obj)) {
 							current.prev.next = current.next;
 							current = null;
@@ -363,7 +365,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 	/** Used to compare elements */
 	private final Comparator<? super E> comparator;
 	/** List of lists */
-	private List<SkipLinkedList<E>> lists;
+	private List<OrderedLinkedList<E>> lists;
 	/** Random for coin tosses */
 	private Random random;
 	/** Number of elements */
@@ -385,15 +387,15 @@ public class SkipList<E extends Comparable<? super E>> extends
 	public SkipList(Comparator<? super E> comp) {
 		comparator = comp;
 		random = new Random();
-		lists = new LinkedList<SkipLinkedList<E>>();
-		lists.add(lists.size(), new SkipLinkedList<E>());
+		lists = new CircularArrayList<OrderedLinkedList<E>>();
+		lists.add(lists.size(), new OrderedLinkedList<E>());
 	}
 
 	@Override
 	public boolean add(E obj) {
-		SkipLinkedList.Node<E> lower = lowerNode(obj);
-		SkipLinkedList.Node<E> insert = new SkipLinkedList.Node<E>(obj, lower,
-				lower.next);
+		OrderedLinkedList.Node<E> lower = lowerNode(obj);
+		OrderedLinkedList.Node<E> insert = new OrderedLinkedList.Node<E>(obj,
+				lower, lower.next);
 		lower.next.prev = insert;
 		lower.next = insert;
 		size++;
@@ -403,7 +405,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E ceiling(E e) {
-		SkipLinkedList.Node<E> result = higherNode(e);
+		OrderedLinkedList.Node<E> result = higherNode(e);
 		while (result != null && result.prev != null
 				&& compare(e, result.data) >= 0) {
 			result = result.prev;
@@ -416,7 +418,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 	public void clear() {
 		size = 0;
 		lists.clear();
-		lists.add(lists.size(), new SkipLinkedList<E>());
+		lists.add(lists.size(), new OrderedLinkedList<E>());
 	}
 
 	@Override
@@ -425,11 +427,11 @@ public class SkipList<E extends Comparable<? super E>> extends
 	}
 
 	private int compare(E o1, E o2) {
-		if ((o1 == SkipLinkedList.Node.GREATEST && o2 != SkipLinkedList.Node.GREATEST)
-				|| (o2 == SkipLinkedList.Node.LEAST && o1 != SkipLinkedList.Node.LEAST))
+		if ((o1 == OrderedLinkedList.Node.GREATEST && o2 != OrderedLinkedList.Node.GREATEST)
+				|| (o2 == OrderedLinkedList.Node.LEAST && o1 != OrderedLinkedList.Node.LEAST))
 			return Integer.MAX_VALUE;
-		else if ((o2 == SkipLinkedList.Node.GREATEST && o1 != SkipLinkedList.Node.GREATEST)
-				|| (o1 == SkipLinkedList.Node.LEAST && o2 != SkipLinkedList.Node.LEAST))
+		else if ((o2 == OrderedLinkedList.Node.GREATEST && o1 != OrderedLinkedList.Node.GREATEST)
+				|| (o1 == OrderedLinkedList.Node.LEAST && o2 != OrderedLinkedList.Node.LEAST))
 			return Integer.MIN_VALUE;
 		return compare(comparator(), o1, o2);
 	}
@@ -439,7 +441,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		try {
 			@SuppressWarnings("unchecked")
 			E other = (E) obj;
-			SkipLinkedList.Node<E> current = lists.get(size() - 1).head.next;
+			OrderedLinkedList.Node<E> current = lists.get(size() - 1).head.next;
 			while (current != null) {
 				while (current.next != null && compare(other, current.data) < 0) {
 					current = current.next;
@@ -463,7 +465,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E floor(E e) {
-		SkipLinkedList.Node<E> result = lowerNode(e);
+		OrderedLinkedList.Node<E> result = lowerNode(e);
 		while (result != null && result.next != null
 				&& compare(e, result.data) <= 0) {
 			result = result.next;
@@ -474,14 +476,14 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E higher(E e) {
-		SkipLinkedList.Node<E> result = higherNode(e);
+		OrderedLinkedList.Node<E> result = higherNode(e);
 		return result == null ? null : result.data;
 	}
 
-	private SkipLinkedList.Node<E> higherNode(E e) {
+	private OrderedLinkedList.Node<E> higherNode(E e) {
 		if (compare(e, lists.get(0).head.next.data) <= 0)
 			return lists.get(0).head;
-		SkipLinkedList.Node<E> current = lists.get(lists.size() - 1).tail;
+		OrderedLinkedList.Node<E> current = lists.get(lists.size() - 1).tail;
 		while (current != null) {
 			while (current.prev != null && compare(e, current.data) > 0) {
 				current = current.prev;
@@ -502,15 +504,15 @@ public class SkipList<E extends Comparable<? super E>> extends
 
 	@Override
 	public E lower(E e) {
-		SkipLinkedList.Node<E> result = lowerNode(e);
+		OrderedLinkedList.Node<E> result = lowerNode(e);
 		return result == null ? null : result.data;
 	}
 
-	private SkipLinkedList.Node<E> lowerNode(E e) {
+	private OrderedLinkedList.Node<E> lowerNode(E e) {
 		if (compare(e, lists.get(0).tail.prev.data) >= 0)
 			return lists.get(0).tail;
 		int level = lists.size() - 1;
-		SkipLinkedList.Node<E> current = lists.get(level).head;
+		OrderedLinkedList.Node<E> current = lists.get(level).head;
 		while (current != null) {
 			while (current.next != null && compare(e, current.data) < 0) {
 				current = current.next;
@@ -535,14 +537,14 @@ public class SkipList<E extends Comparable<? super E>> extends
 		return lists.get(0).minimum();
 	}
 
-	private void promote(int level, SkipLinkedList.Node<E> node) {
+	private void promote(int level, OrderedLinkedList.Node<E> node) {
 		if (random.nextBoolean()) {
-			SkipLinkedList.Node<E> lower = node.prev;
+			OrderedLinkedList.Node<E> lower = node.prev;
 			while (lower.prev != null && lower.prev.parent == null) {
 				lower = lower.prev;
 			}
 			if (level + 2 > lists.size()) {
-				lists.add(lists.size(), new SkipLinkedList<E>());
+				lists.add(lists.size(), new OrderedLinkedList<E>());
 				lists.get(lists.size() - 1).head.child = lists
 						.get(lists.size() - 2).head;
 				lists.get(lists.size() - 2).head.parent = lists.get(lists
@@ -553,7 +555,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 						.size() - 1).tail;
 			}
 			lower = lower.parent;
-			SkipLinkedList.Node<E> promotee = new SkipLinkedList.Node<E>(
+			OrderedLinkedList.Node<E> promotee = new OrderedLinkedList.Node<E>(
 					node.data, lower.next, lower);
 			promotee.child = node;
 			node.parent = promotee;
@@ -562,7 +564,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		}
 	}
 
-	private void demote(int level, SkipLinkedList.Node<E> node) {
+	private void demote(int level, OrderedLinkedList.Node<E> node) {
 		if (level < lists.size() && node != null) {
 			demote(level + 1, node.parent);
 			node.prev.next = node.next;
@@ -575,7 +577,7 @@ public class SkipList<E extends Comparable<? super E>> extends
 		try {
 			@SuppressWarnings("unchecked")
 			E other = (E) obj;
-			SkipLinkedList.Node<E> current = lists.get(size() - 1).head.next;
+			OrderedLinkedList.Node<E> current = lists.get(size() - 1).head.next;
 			while (current != null) {
 				while (current.next != null && compare(other, current.data) < 0) {
 					current = current.next;

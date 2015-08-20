@@ -171,8 +171,8 @@ public class ArrayList<E> extends AbstractDequeList<E> {
 
 	@Override
 	public void add(int index, E obj) {
-		rangeCheck(index);
 		ensureCapacity(size() + 1);
+		rangeCheck(index);
 
 		rotateRightAfterIndex(index);
 		data[index] = obj;
@@ -283,8 +283,8 @@ public class ArrayList<E> extends AbstractDequeList<E> {
 	 *            starting position
 	 */
 	private void rotateRightAfterIndex(int fromIndex) {
-		rangeCheck(fromIndex);
 		ensureCapacity(size() + 1);
+		rangeCheck(fromIndex);
 
 		for (int i = size++; i > fromIndex; i--)
 			data[i] = data[i - 1];

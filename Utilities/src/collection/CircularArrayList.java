@@ -170,8 +170,8 @@ public class CircularArrayList<E> extends AbstractDequeList<E> {
 
 	@Override
 	public void add(int index, E obj) {
-		rangeCheck(index);
 		ensureCapacity(size() + 1);
+		rangeCheck(index);
 
 		if (index == 0) {
 			// First element
@@ -347,8 +347,8 @@ public class CircularArrayList<E> extends AbstractDequeList<E> {
 	 *            starting position
 	 */
 	private void rotateLeftBeforeIndex(int fromIndex) {
-		rangeCheck(fromIndex);
 		ensureCapacity(size() + 1);
+		rangeCheck(fromIndex);
 
 		for (int i = head; i < fromIndex; i++)
 			data[i] = data[i + 1];
@@ -367,8 +367,8 @@ public class CircularArrayList<E> extends AbstractDequeList<E> {
 	 *            starting position
 	 */
 	private void rotateRightAfterIndex(int fromIndex) {
-		rangeCheck(fromIndex);
 		ensureCapacity(size() + 1);
+		rangeCheck(fromIndex);
 
 		for (int i = tail++; i > fromIndex; i--)
 			data[i] = data[i - 1];

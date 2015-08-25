@@ -189,18 +189,17 @@ public class TreeMultiset<E extends Comparable<? super E>> extends
 	 * @return true if operation run, false otherwise
 	 */
 	private boolean blackSiblingBlackChildren(Node<E> sibling) {
-		if (sibling != null && sibling.isBlack) {
-			if ((sibling.left == null || sibling.left.isBlack)
-					&& (sibling.right == null || sibling.right.isBlack)) {
-				// Two black children
-				boolean flag = sibling.isBlack;
-				sibling.parent.isBlack = true;
-				sibling.isBlack = false;
-				if (flag)
-					recolorRemove(sibling.parent, sibling.parent.parent,
-							sibling.parent == sibling.parent.parent.left);
-				return true;
-			}
+		if (sibling != null && sibling.isBlack
+				&& (sibling.left == null || sibling.left.isBlack)
+				&& (sibling.right == null || sibling.right.isBlack)) {
+			// Two black children
+			boolean flag = sibling.isBlack;
+			sibling.parent.isBlack = true;
+			sibling.isBlack = false;
+			if (flag)
+				recolorRemove(sibling.parent, sibling.parent.parent,
+						sibling.parent == sibling.parent.parent.left);
+			return true;
 		}
 		return false;
 	}

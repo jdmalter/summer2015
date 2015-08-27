@@ -14,7 +14,8 @@ public class Arrays {
 	public static final int DEFAULT_CAPACITY = 16;
 	/** Empty array used to initially back array based collections */
 	public static final Object[] DEFAULT_ARRAY = new Object[DEFAULT_CAPACITY];
-	private static final int QUICK_TO_INSERT_SORT = 24;
+	private static final int MERGE_TO_INSERT_SORT = 96;
+	private static final int QUICK_TO_INSERT_SORT = 48;
 
 	private Arrays() {
 	}
@@ -260,6 +261,10 @@ public class Arrays {
 	public static <T extends Comparable<? super T>> void mergeSort(T[] array) {
 		if (array.length < 2)
 			return;
+		else if (array.length < MERGE_TO_INSERT_SORT) {
+			insertionSort(array);
+			return;
+		}
 		int half = array.length / 2;
 
 		// suppress safe since only elements of type T will be copied into array
@@ -359,7 +364,7 @@ public class Arrays {
 			int first, int last) {
 		if (array.length < 2)
 			return;
-		if (array.length < QUICK_TO_INSERT_SORT)
+		else if (array.length < QUICK_TO_INSERT_SORT)
 			insertionSort(array);
 		else if (first < last) {
 			int pivot = randomPartition(array, first, last);

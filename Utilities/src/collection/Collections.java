@@ -16,7 +16,8 @@ public class Collections {
 	public static final Collection<?> ITERABLE_AND_REMOVE_COLLECTION = new CircularArrayList<Object>();
 	/** Empty collection used for comparable elements. */
 	public static final Collection<?> EMPTY_COMPARABLE_COLLECTION = new ArrayPriorityQueue<Comparable<Object>>();
-	private static final int QUICK_TO_INSERT_SORT = 24;
+	private static final int MERGE_TO_INSERT_SORT = 96;
+	private static final int QUICK_TO_INSERT_SORT = 48;
 
 	private Collections() {
 	}
@@ -200,6 +201,10 @@ public class Collections {
 	public static <T extends Comparable<? super T>> void mergeSort(List<T> list) {
 		if (list.size() < 2)
 			return;
+		else if (list.size() < MERGE_TO_INSERT_SORT) {
+			insertionSort(list);
+			return;
+		}
 		int half = list.size() / 2;
 
 		// suppress safe since only elements of type T will be copied into list
@@ -300,7 +305,7 @@ public class Collections {
 			List<T> list, int first, int last) {
 		if (list.size() < 2)
 			return;
-		if (list.size() < QUICK_TO_INSERT_SORT)
+		else if (list.size() < QUICK_TO_INSERT_SORT)
 			insertionSort(list);
 		else if (first < last) {
 			int pivot = randomPartition(list, first, last);
